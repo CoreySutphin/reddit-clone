@@ -1,0 +1,31 @@
+{
+	"comment_ids": {
+		"type": "array",
+		"items": {
+			"type": "number"
+		},
+		"uniqueItems": true
+	},
+	"title": {
+		"type": "string"
+	},
+	"content": {
+		"type": "string"
+	},
+	"subreddit": {
+		"type": "string"
+	},
+	"timestamp": {
+		"type": "string",
+		"format": "date-time"
+	},
+	"user": {
+		"type": "string"
+	},
+	"upvotes": {
+		"type": "number"
+	},
+	"downvotes": {
+		"type": "number"
+	}
+}

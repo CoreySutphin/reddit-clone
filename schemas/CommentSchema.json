@@ -1,0 +1,24 @@
+{
+	"comment_id": {
+		"type": "string"
+	},
+	"parent_id:": {
+		"type": "string"
+	},
+	"user": {
+		"type": "string"
+	},
+	"content": {
+		"type": "string"
+	},
+	"timestamp": {
+		"type": "string",
+		"format": "date-time"
+	},
+	"upvotes": {
+		"type": "number"
+	},
+	"downvotes": {
+		"type": "number"
+	}
+}

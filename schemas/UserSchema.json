@@ -1,0 +1,41 @@
+{
+	"username": {
+		"type": "string"
+	},
+	"password": {
+		"type": "string"
+	},
+	"email": {
+		"type": "string"
+	},
+	"subscribedSubs": {
+		"type": "array",
+		"items": {
+			"type": "string"
+		},
+		"uniqueItems": true
+	},
+	"totalScore": {
+		"type": "number"
+	},
+	"comments": {
+		"type": "array",
+		"items": {
+			"type": "string"
+		},
+		"uniqueItems": true,
+		"description": "Array of comment ids from comments the user has created."
+	},
+	"posts": {
+		"type": "array",
+		"items": {
+			"type": "string"
+		},
+		"uniqueItems": true,
+		"description": "Array of post ids from posts the user has created."
+	},
+	"accountCreationTimestamp": {
+		"type": "string",
+		"format": "date-time"
+	}
+}

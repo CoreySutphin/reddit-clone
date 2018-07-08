@@ -1,0 +1,19 @@
+{
+  "name": {
+    "type": "string"
+  },
+  "posts": {
+    "type": "array",
+    "items": {
+      "type": "string"
+    },
+    "uniqueItems": true,
+    "description": "Array of post ids for posts on this subreddit"
+  },
+  "numSubbed": {
+    "type": "number"
+  },
+  "description": {
+    "type": "string"
+  }
+}
