@@ -1,0 +1,120 @@
+{
+	"posts": {
+		"comment_ids": {
+			"type": "array",
+			"items": {
+				"type": "number"
+			},
+			"uniqueItems": true
+		},
+		"title": {
+			"type": "string"
+		},
+		"content": {
+			"type": "string"
+		},
+		"subreddit": {
+			"type": "string"
+		},
+		"timestamp": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"user": {
+			"type": "string"
+		},
+		"upvotes": {
+			"type": "number"
+		},
+		"downvotes": {
+			"type": "number"
+		}
+	},
+
+	"comments": {
+		"comment_id": {
+			"type": "string"
+		},
+		"parent_id:": {
+			"type": "string"
+		},
+		"user": {
+			"type": "string"
+		},
+		"content": {
+			"type": "string"
+		},
+		"timestamp": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"upvotes": {
+			"type": "number"
+		},
+		"downvotes": {
+			"type": "number"
+		}
+	},
+
+	"users": {
+		"username": {
+			"type": "string"
+		},
+		"password": {
+			"type": "string"
+		},
+		"email": {
+			"type": "string"
+		},
+		"subscribedSubs": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"uniqueItems": true
+		},
+		"totalScore": {
+			"type": "number"
+		},
+		"comments": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"uniqueItems": true,
+			"description": "Array of comment ids from comments the user has created."
+		},
+		"posts": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"uniqueItems": true,
+			"description": "Array of post ids from posts the user has created."
+		},
+		"accountCreationTimestamp": {
+			"type": "string",
+			"format": "date-time"
+		}
+	},
+
+	"subreddits": {
+		"name": {
+			"type": "string"
+		},
+		"posts": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"uniqueItems": true,
+			"description": "Array of post ids for posts on this subreddit"
+		},
+		"numSubbed": {
+			"type": "number"
+		},
+		"description": {
+			"type": "string"
+		}
+	}
+}
