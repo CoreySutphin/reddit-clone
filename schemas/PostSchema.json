@@ -1,8 +1,9 @@
 {
+  "post_id": { "type": "string" },
 	"comment_ids": {
 		"type": "array",
 		"items": {
-			"type": "number"
+			"type": "string"
 		},
 		"uniqueItems": true
 	},

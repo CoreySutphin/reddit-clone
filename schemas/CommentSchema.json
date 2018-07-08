@@ -3,7 +3,8 @@
 		"type": "string"
 	},
 	"parent_id:": {
-		"type": "string"
+		"type": "string",
+    "description": "Will either be id of comment it's connected to or post id if it's a top level comment."
 	},
 	"user": {
 		"type": "string"
