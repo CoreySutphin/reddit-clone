@@ -1,0 +1,5 @@
+mixin top-navbar(...subreddits)
+  .top-navbar
+    ul(class = 'topnav-subreddit-list')
+      each subreddit in subreddits
+        li= subreddit

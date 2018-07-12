@@ -1,0 +1,8 @@
+.topnav-subreddit-list {
+  display: inline;
+  white-space: nowrap;
+  text-transform: uppercase;
+  font-size: 90%;
+  line-height: 18px;
+  overflow: hidden;
+}

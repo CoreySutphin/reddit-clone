@@ -1,0 +1,16 @@
+include top-navbar-mixin.pug
+
+doctype html
+html(lang="en")
+
+  head
+    title reddit-clone
+    link(href='css/subreddit-styles.css', rel='stylesheet')
+
+  body
+    header
+      +top-navbar("Funny", "News", "Gaming")
+    section
+      p section
+    footer
+      p section
