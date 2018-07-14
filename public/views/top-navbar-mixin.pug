@@ -1,5 +1,5 @@
 mixin top-navbar(...subreddits)
-  .top-navbar
-    ul(class = 'topnav-subreddit-list')
+  .topnav
+    ul
       each subreddit in subreddits
-        li= subreddit
+        li: a(href!='r/' + subreddit)=subreddit

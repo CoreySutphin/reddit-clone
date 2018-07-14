@@ -25,4 +25,10 @@ app.get('/', (req, res) => {
   res.render("subreddit");
 });
 
+// Route for serving a specific subreddit
+app.get('/r/:subreddit', (req, res) => {
+  let subreddit = req.params.subreddit;
+  res.send(subreddit);
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
