@@ -10,8 +10,8 @@ const UserSchema = new Schema({
   subscribedSubs: [{ type: String, unique: true }],
   posts: [{ type: String, unique: true }],
   comments: [{ type: String, unique: true }],
-  totalScore: Number,
-  accountCreationTimestamp: Date
+  totalScore: { type: Number, default: 0},
+  accountCreationTimestamp:{ type: Date, default: Date.now}
 });
 
 // Hashes the new account's password before sending it to the database

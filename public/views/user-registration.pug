@@ -1,6 +1,10 @@
 extends header
 
 block content
+  if errors
+    ul
+    each error in errors
+      li= error.msg
   h1 User registration
   form(method='post', action='/register')
     #form-group

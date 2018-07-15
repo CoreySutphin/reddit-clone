@@ -1,0 +1,14 @@
+extends header
+
+block content
+  h1 Login
+  form(method='post', action='/login')
+    #form-group
+      label Username:
+      input(name='username', type='text')
+    #form-group
+      label Password:
+      input(name='password', type='password')
+    br
+    input(type='submit', value='Submit')
+  
