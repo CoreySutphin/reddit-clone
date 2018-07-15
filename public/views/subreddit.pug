@@ -1,7 +1,18 @@
-extends header
+extends header.pug
+include top-navbar-mixin.pug
+include bottom-navbar-mixin.pug
+
+block css 
+  link(href='css/header-styles.css', rel='stylesheet')
+  link(href='css/subreddit-styles.css', rel='stylesheet')
+    
+block header
+  div.header
+    +top-navbar("Funny", "News", "Gaming")
+    +bottom-navbar("Best", "Hot", "New", "Rising", "Top")
 
 block content
   p section
   div.testdiv
   footer
-    p section
+  p section

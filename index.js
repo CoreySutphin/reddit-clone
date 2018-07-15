@@ -12,7 +12,7 @@ const app = express();
 app.set("view engine", "pug");
 app.set('views', path.join(__dirname, '/public/views'));
 
-app.use(express.static(__dirname + '/public')) // Include CSS values
+app.use(express.static(__dirname + '/public')) // Include static files
 app.use(bodyParser.json()); // For parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
 
