@@ -1,15 +1,16 @@
 include top-navbar-mixin.pug
-include subreddit-navbar-mixin.pug
-
+include bottom-navbar-mixin.pug
 
 doctype html
 html(lang="en")
 
   head
     title reddit-clone
-    link(href='css/subreddit-styles.css', rel='stylesheet')
+    block css
+      link(href='css/header-styles.css', rel='stylesheet')
   body
-    header
-      +top-navbar("Funny", "News", "Gaming")
-      +subreddit-navbar
+    block header
+      div.header
+        +top-navbar
+        +bottom-navbar
     block content

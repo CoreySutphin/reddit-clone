@@ -1,18 +1,18 @@
+extends header.pug
 include top-navbar-mixin.pug
-include subreddit-navbar-mixin.pug
+include bottom-navbar-mixin.pug
 
-doctype html
-html(lang="en")
+block css 
+  link(href='css/header-styles.css', rel='stylesheet')
+  link(href='css/subreddit-styles.css', rel='stylesheet')
+    
+block header
+  div.header
+    +top-navbar("Funny", "News", "Gaming")
+    +bottom-navbar("Best", "Hot", "New", "Rising", "Top")
 
-  head
-    title reddit-clone
-    link(href='css/subreddit-styles.css', rel='stylesheet')
-
-  body
-    header
-      +top-navbar("Funny", "News", "Gaming")
-      +subreddit-navbar 
-    p section
-    div.testdiv
-    footer
-      p section
+block content
+  p section
+  div.testdiv
+  footer
+  p section

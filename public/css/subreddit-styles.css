@@ -1,62 +1,14 @@
 * {
   margin: 0;
   padding: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
 
 .body {
   font: normal x-small verdana,arial,helvetica,sans-serif;
-}
-
-/*Top navbar for all subscribed subreddits */
-.topnav {
-  background-color: #f0f0f0;
-  border-bottom: 1px solid gray;
-  text-transform: uppercase;
-  font-size: 90%;
-  line-height: 18px;
-  min-height: 18px;
-  height: 2vh;
-  width: 100%;
-  overflow: hidden;
-  position: fixed;
-}
-
-.topnav ul  {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  min-width: 780px;
-}
-
-.topnav li {
-  display: inline;
-}
-
-.topnav li a {
-  color: black;
-  text-align: center;
-  padding: 8px;
-  text-decoration: none;
-  font: normal x-small verdana,arial,helvetica,sans-serif;
-  font-size: 65%;
-}
-
-.topnav li a:hover {
-  text-decoration: underline;
-}
-
-/* */
-.subreddit-navbar {
-  background-color: #cee3f8;
-  border-bottom: 1px solid #5f99cf;
-  min-height: 50px;
-  height: 5vh;
-  width: 100%;
-  padding-top: 2vh;
-}
-
-.subreddit-navbar h2 {
-  vertical-align: bottom;
 }
 
 .testdiv {
