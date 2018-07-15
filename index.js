@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 const port = process.env.port || 3000;
 
@@ -21,6 +22,8 @@ mongoose.connect('mongodb://<dbuser>:<dbpassword>@ds129831.mlab.com:29831/reddit
   console.log("Successfully connected to MongoDB");
 });
 
+let User = require('./models/UserSchema')
+
 app.get('/', (req, res) => {
   res.render("subreddit");
 });
@@ -29,6 +32,11 @@ app.get('/', (req, res) => {
 app.get('/r/:subreddit', (req, res) => {
   let subreddit = req.params.subreddit;
   res.send(subreddit);
+});
+
+// Route for serving the user registration page
+app.get('/register', (req,res) => {
+  res.render('user-registration');
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
