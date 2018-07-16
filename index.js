@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const { check, validationResult} = require('express-validator/check');
+const session = require('express-session');
+const passport = require('passport');
 
 const port = process.env.port || 3000;
 
@@ -15,6 +17,17 @@ app.set('views', path.join(__dirname, '/public/views'));
 app.use(express.static(__dirname + '/public')) // Include static files
 app.use(bodyParser.json()); // For parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+//Express Session middleware
+app.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true,
+}));
+//Passport config for local user sessions
+require('./config/passport')(passport);
+//Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Replace with your db username and password
 mongoose.connect('mongodb://joseph:Woodside1@ds129831.mlab.com:29831/reddit-clone-cs', { useNewUrlParser: true },
@@ -26,12 +39,11 @@ mongoose.connect('mongodb://joseph:Woodside1@ds129831.mlab.com:29831/reddit-clon
 //Models
 let User = require('./models/UserSchema')
 
-//Express Session middleware
-//app.use(session({
-  //secret: 'keyboard cat',
-  //resave: true,
-  //saveUninitialized: true,
-//}));
+//Sets a global user variable if user is logged in
+app.get('*', (req,res,next) => {
+  res.locals.user = req.user || null;
+  next();
+});
 
 app.get('/', (req, res) => {
   res.render("subreddit");
@@ -98,5 +110,18 @@ app.post('/register', [
 app.get('/login', (req,res) => {
   res.render('login');
 });
+
+//Login post Route
+app.post('/login', (req,res,next) => {
+  passport.authenticate('local', { successRedirect: '/',
+                                   failureRedirect: '/login' })(req,res,next);
+});
+
+//Logout route
+app.get('/logout', (req,res) => {
+  req.logout();
+  res.redirect('/login');
+});
+
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

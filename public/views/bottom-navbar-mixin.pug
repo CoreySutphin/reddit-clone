@@ -5,6 +5,11 @@ mixin bottom-navbar(name, ...tabs)
     ul(class='tab-menu')
       each tab in tabs
         li: a(href!= 'r/' + name + '/' + tab)=tab
+    if user
+      a.nav-link(href='/logout') Logout
+    else
+      a.nav-link(href='/login') Login 
+      a.nav-link(href='/register') Register
     
     
       

@@ -13,6 +13,8 @@ block header
 
 block content
   p section
+  if user
+    p Welcome, #{user.username}! Your Karma is #{user.totalScore}.
   div.testdiv
   footer
     p section
