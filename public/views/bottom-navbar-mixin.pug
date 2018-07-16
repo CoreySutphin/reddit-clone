@@ -1,7 +1,10 @@
-mixin bottom-navbar(...tabs)
+mixin bottom-navbar(name, ...tabs)
   .botnav
-    a(href="/" class='reddit-logo'): h2 Reddit
+    a(href='/' class='reddit-logo') Reddit
+    span(class='page-name') Page
     ul(class='tab-menu')
       each tab in tabs
-        li: a(href!= '/')=tab
+        li: a(href!= 'r/' + name + '/' + tab)=tab
+    
+    
       
