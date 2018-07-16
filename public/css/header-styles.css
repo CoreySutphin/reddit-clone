@@ -1,3 +1,4 @@
+/* Top level div for both navbars */
 .header {
   border-bottom: 1px solid #5f99cf;
   position: relative;
@@ -24,8 +25,7 @@
   border-bottom: 1px solid gray;
   font-size: 90%;
   line-height: 18px;
-  min-height: 18px;
-  height: 2vh;
+  height: 18px;
   position: absolute;
 }
 
@@ -52,13 +52,24 @@
 /* CSS for 2nd navbar */
 .botnav {
   font-size: larger;
+  line-height: normal;
 }
 
 .reddit-logo {
+  text-indent: -9999px;
+  background-image: url(../images/reddit-logo.jpg);
+  background-position: 0px -1323px;
+  background-repeat: no-repeat;
+  height: 40px;
+  width: 120px;
   display: inline-block;
-  text-decoration: none;
-  min-height: 40px;
-  color: black;
+  vertical-align: bottom;
+  margin-bottom: 3px;
+}
+
+.botnav img {
+  margin-top: 2px;
+  margin-right: 5px;
 }
 
 /* The tab options for the second navbar, ex: 'Hot', "New', 'Rising', etc */
@@ -82,4 +93,21 @@
   background-color: #eff7ff;
   text-decoration: none;
   color: #000;
+}
+
+.page-name {
+  font-weight: bold;
+  margin-right: 1ex;
+  font-variant: small-caps;
+  font-size: 1.2em;
+  vertical-align: bottom;
+}
+
+.botnav-user-info {
+  right: 0px;
+  bottom: 0px;
+  background-color: #EFF7FF;
+  padding: 4px;
+  line-height: 12px;
+  border-top-left-radius: 7px;
 }
