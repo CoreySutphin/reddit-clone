@@ -1,20 +1,21 @@
 extends header.pug
 include top-navbar-mixin.pug
 include bottom-navbar-mixin.pug
+include post-mixin.pug
 
 block css 
   link(href='css/header-styles.css', rel='stylesheet')
   link(href='css/subreddit-styles.css', rel='stylesheet')
-    
-block header
-  div.header(role='banner')
-    +top-navbar("Funny", "News", "Gaming")
-    +bottom-navbar("Subreddit", "Best", "Hot", "New", "Rising", "Top")
 
 block content
-  p section
-  if user
-    p Welcome, #{user.username}! Your Karma is #{user.totalScore}.
+  div.post-table
+    +post({"upvotes": 55, "downvotes": 22, "title": "TEST POST PLS IGNORE", 
+      "timestamp": "2018-01-03", "user": "DieselDragon", "subreddit": "All"}, 1)
+    +post({"upvotes": 55, "downvotes": 22, "title": "TEST POST PLS IGNORE", 
+      "timestamp": "2018-01-03", "user": "PumpMasterP", "subreddit": "All"}, 2)
+    +post({"upvotes": 55, "downvotes": 22, "title": "TEST POST PLS IGNORE", 
+      "timestamp": "2018-01-03", "user": "MoneyMaker49x", "subreddit": "All"}, 3)
+    
   div.testdiv
   footer
     p section

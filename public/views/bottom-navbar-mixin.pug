@@ -5,13 +5,15 @@ mixin bottom-navbar(name, ...tabs)
     ul(class='tab-menu')
       each tab in tabs
         li: a(href!= 'r/' + name + '/' + tab)=tab
+        
   .botnav-right
-    span(class='user')
-      a(href='google.com') CoreyTheQT
-      span(class='user-karma' title='post karma') 1
-    span(class='separator') |
-    form(class='logout hover' method='post' action='/logout')
-      a(href='javascript:void(0)' onclick='$(this).parent().submit()')
+    if user
+      span(class='user')
+        a(href='google.com') #{user.username}
+        span(class='user-karma' title='post karma') #{user.totalScore}
+        span(class='separator') |
+        form(class='logout hover' method='post' action='/logout')
+          a(href='javascript:void(0)' onclick='$(this).parent().submit()')
       
       
     

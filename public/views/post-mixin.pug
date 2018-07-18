@@ -1,3 +1,14 @@
 //- Declaration (post-mixin.pug)
-
-mixin post
+mixin post(post, rank)
+  .post
+    span(class='rank')=rank
+    .post-votes-info
+      span(class='score')=post.upvotes- post.downvotes
+  
+    .entry
+      p(class='title')=post.title
+      .tag-line 
+        p(class='tag-text')='Submitted ' + post.timestamp + ' by '
+        a(class='tag-author' href!='user/' + post.user)=post.user
+        p(class='tag-text')=' to '
+        a(class='tag-subreddit' href!='r/' + post.subreddit)='r/' + post.subreddit
