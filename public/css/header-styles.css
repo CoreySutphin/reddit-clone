@@ -1,5 +1,5 @@
 /* Top level div for both navbars */
-.header {
+#header {
   border-bottom: 1px solid #5f99cf;
   position: relative;
   background-color: #cee3f8;
@@ -25,8 +25,9 @@
   border-bottom: 1px solid gray;
   font-size: 90%;
   line-height: 18px;
-  height: 18px;
   position: absolute;
+  left: 0px;
+  right: 0px;
 }
 
 .topnav-list {
@@ -50,9 +51,18 @@
 }
 
 /* CSS for 2nd navbar */
-.botnav {
+.botnav-left {
   font-size: larger;
-  line-height: normal;
+}
+
+.reddit-header {
+  height: 40px;
+  width: 120px;
+  display: inline-block;
+  vertical-align: bottom;
+  margin-bottom: 3px;
+  margin-top: 2px;
+  margin-right: 5px;
 }
 
 .reddit-logo {
@@ -65,9 +75,6 @@
   display: inline-block;
   vertical-align: bottom;
   margin-bottom: 3px;
-}
-
-.botnav img {
   margin-top: 2px;
   margin-right: 5px;
 }
@@ -103,11 +110,20 @@
   vertical-align: bottom;
 }
 
-.botnav-user-info {
+.botnav-right {
+  position: absolute;
   right: 0px;
   bottom: 0px;
   background-color: #EFF7FF;
   padding: 4px;
   line-height: 12px;
   border-top-left-radius: 7px;
+}
+
+.botnav-right user {
+  color: gray;
+}
+
+.botnav-right user-karma {
+  font-weight: bold;
 }

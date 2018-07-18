@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 const bcrypt = require('bcrypt');
-const { check, validationResult} = require('express-validator/check');
+const { check, validationResult } = require('express-validator/check');
 const session = require('express-session');
 const passport = require('passport');
 

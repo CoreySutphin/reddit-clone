@@ -1,15 +1,19 @@
 mixin bottom-navbar(name, ...tabs)
-  .botnav
-    a(href='/' class='reddit-logo') Reddit
+  .botnav-left
+    a(href='/' class='reddit-header') Reddit
     span(class='page-name') Page
     ul(class='tab-menu')
       each tab in tabs
         li: a(href!= 'r/' + name + '/' + tab)=tab
-    if user
-      a.nav-link(href='/logout') Logout
-    else
-      a.nav-link(href='/login') Login 
-      a.nav-link(href='/register') Register
+  .botnav-right
+    span(class='user')
+      a(href='google.com') CoreyTheQT
+      span(class='user-karma' title='post karma') 1
+    span(class='separator') |
+    form(class='logout hover' method='post' action='/logout')
+      a(href='javascript:void(0)' onclick='$(this).parent().submit()')
+      
+      
     
     
       
