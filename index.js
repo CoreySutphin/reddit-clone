@@ -42,6 +42,8 @@ let User = require('./models/UserSchema')
 //Sets a global user variable if user is logged in
 app.get('*', (req,res,next) => {
   res.locals.user = req.user || null;
+  let defaultSubreddits = ['Funny', 'News','Gaming'];
+  res.locals.subreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
   next();
 });
 
