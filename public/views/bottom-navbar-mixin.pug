@@ -12,7 +12,7 @@ mixin bottom-navbar(name, ...tabs)
         a(href='google.com') #{user.username}
         span(class='user-karma' title='post karma') #{user.totalScore}
         span(class='separator') |
-        form(class='logout hover' method='post' action='/logout')
+        form(class='logout hover' method='post' action='/uath/logout')
           a(href='javascript:void(0)' onclick='$(this).parent().submit()')
       
       
