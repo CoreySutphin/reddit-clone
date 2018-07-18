@@ -1,0 +1,23 @@
+extends header
+
+block content
+  if errors
+    ul
+    each error in errors
+      li= error.msg
+  h1 Create Subreddit
+  form(method='post', action='/r/create')
+    #form-group
+      label Name:
+      input(name='name', type='text')
+    #form-group
+      label title:
+      input(name='title', type='text')
+    #form-group
+      label description:
+      textarea(name='description')
+    #form-group
+      label sidebar:
+      textarea(name='sidebar')
+    br
+    input(type='submit', value='Submit')

@@ -50,6 +50,16 @@ app.get('*', (req,res,next) => {
   next();
 });
 
+app.post('*', (req,res,next) => {
+  res.locals.user = req.user || null;
+  let defaultSubreddits = ['Funny', 'News','Gaming'];
+
+  //Sets a global variable of subreddits to either the users subscribedSubs
+  //or default subs if no user logged in
+  res.locals.subreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
+  next();
+});
+
 app.get('/', (req, res) => {
   res.render("subreddit");
 });
@@ -60,6 +70,7 @@ app.get('/r/:subreddit', (req, res) => {
   res.send(subreddit);
 });
 */
+
 //Serve subreddit routes
 let subredditRoutes = require(path.join(__dirname + '/public/routes/subreddits'));
 app.use('/r', subredditRoutes);
