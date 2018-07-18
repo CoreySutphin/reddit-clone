@@ -1,8 +1,9 @@
-mixin top-navbar(...subreddits)
+mixin top-navbar([...subreddits])
   .topnav
     .topnav-list
       ul
-        each subreddit in subreddits
+        each subreddit, index in subreddits
           li
-            span(class='separator') - 
-            a(href!='r/' + subreddit)=subreddit
+            if index != 0
+              span(class='separator') - 
+            a(href!='r/' + subreddit)= subreddit

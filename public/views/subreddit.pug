@@ -6,11 +6,6 @@ block css
   link(href='css/header-styles.css', rel='stylesheet')
   link(href='css/subreddit-styles.css', rel='stylesheet')
     
-block header
-  div.header
-    +top-navbar("Funny", "News", "Gaming")
-    +bottom-navbar("Subreddit", "Best", "Hot", "New", "Rising", "Top")
-
 block content
   p section
   if user

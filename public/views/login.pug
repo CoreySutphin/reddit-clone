@@ -1,9 +1,8 @@
 extends header
-    
-block header
-  div.header
-    +top-navbar("Funny", "News", "Gaming")
-    +bottom-navbar
+
+block css 
+  link(href='css/header-styles.css', rel='stylesheet')
+  link(href='css/subreddit-styles.css', rel='stylesheet')
 
 block content
   h1 Login
