@@ -54,15 +54,15 @@ app.get('/', (req, res) => {
   res.render("subreddit");
 });
 
-// Route for serving a specific subreddit
+/* Route for serving a specific subreddit
 app.get('/r/:subreddit', (req, res) => {
   let subreddit = req.params.subreddit;
   res.send(subreddit);
 });
-
+*/
 //Serve subreddit routes
-//let subredditRoutes = require(path.join(__dirname + '/public/routes/subreddits'));
-//app.use('/r', subredditRoutes);
+let subredditRoutes = require(path.join(__dirname + '/public/routes/subreddits'));
+app.use('/r', subredditRoutes);
 
 //Serve user authentication i.e. Login,Register,logout
 let uauth = require(path.join(__dirname + '/public/routes/user_authentication'));
