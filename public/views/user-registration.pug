@@ -10,7 +10,7 @@ block content
     each error in errors
       li= error.msg
   h1 User registration
-  form(method='post', action='/register')
+  form(method='post', action='/uauth/register')
     #form-group
       label Email:
       input(name='email', type='email')

@@ -6,10 +6,10 @@ mixin bottom-navbar(name, ...tabs)
       each tab in tabs
         li: a(href!= 'r/' + name + '/' + tab)=tab
     if user
-      a.nav-link(href='/logout') Logout
+      a.nav-link(href='/uauth/logout') Logout
     else
-      a.nav-link(href='/login') Login 
-      a.nav-link(href='/register') Register
+      a.nav-link(href='/uauth/login') Login 
+      a.nav-link(href='/uauth/register') Register
     
     
       
