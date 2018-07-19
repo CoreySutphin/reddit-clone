@@ -5,7 +5,8 @@ const path = require('path');
 const { check, validationResult} = require('express-validator/check');
 
 __parentDir = path.dirname(process.mainModule.filename);
-let SubredditModel = require(path.join(__parentDir + '/models/SubredditSchema'));
+let Subreddit = require(path.join(__parentDir + '/models/SubredditSchema'));
+let Post = require(path.join(__parentDir + '/models/PostSchema'));
 
 router.use(express.static(__parentDir + '/public')) // Include static files
 
@@ -37,6 +38,20 @@ router.post('/create', [
       errors: errors
     });
   } else {
+    let newSubreddit = new Subreddit({
+      name: req.body.name,
+      posts: [],
+      title: req.body.title,
+      description: req.body.description,
+      sidebar: req.body.sidebar
+    });
+
+    newSubreddit.save((err, subreddit) => {
+      if (err) throw err;
+
+      console.log(subreddit);
+    });
+
     res.redirect('/');
   }
 });
@@ -44,10 +59,40 @@ router.post('/create', [
 // Route for serving a specific subreddit
 router.get('/:subreddit', (req, res) => {
   let subredditName = req.params.subreddit;
-  SubredditModel.findOne({ name: subredditName }, (err, subreddit) => {
+  Subreddit.findOne({ name: subredditName }, (err, subreddit) => {
     if (err) throw err;
     res.send(subreddit);
   });
 });
+
+// Route for serving a subreddit with posts sorted by some condition
+router.get('/:subreddit/:condition', (req, res) => {
+  let subredditName = req.params.subreddits;
+  let condition = req.params.subreddits;
+  Subreddit.findOne({ name: subredditName }, (err, subreddit) => {
+    if (err) throw err;
+
+    // All Post objects submitted to this subreddit
+    var subredditPosts;
+    Post.find({ subreddit: subredditName }, (err, postsData) => {
+      if (err) throw err;
+      subredditPosts = postsData
+    });
+
+    switch (condition) {
+      case "Top":
+        // sort posts by score descending
+        subredditPosts.sort(function compare(a, b) {
+          a.score = a.upvotes - a.downvotes;
+          b.score = b.upvotes = b.downvotes;
+          return b - a;
+        });
+        break;
+    }
+  });
+});
+
+// Route for serving a post's comments page
+router.get('/:subreddit/posts/:postId')
 
 module.exports = router;
