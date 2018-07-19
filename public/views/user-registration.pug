@@ -3,25 +3,29 @@ extends header
 block css 
   link(href='css/header-styles.css', rel='stylesheet')
   link(href='css/subreddit-styles.css', rel='stylesheet')
+  link(href='css/form-styles.css', rel='stylesheet')
 
 block content
   if errors
     ul
     each error in errors
       li= error.msg
-  h1 User registration
   form(method='post', action='/uauth/register')
-    #form-group
-      label Email:
-      input(name='email', type='email')
-    #form-group
-      label Username:
-      input(name='username', type='text')
-    #form-group
-      label Password:
-      input(name='password', type='password')
-    #form-group
-      label Confirm Password:
-      input(name='pass_confirmation', type='password')
+    .form-group
+      label.formLabel Email:
+      br
+      input.formInput(name='email', type='email')
+    .form-group
+      label.formLabel Username:
+      br
+      input.formInput(name='username', type='text')
+    .form-group
+      label.formLabel Password:
+      br
+      input.formInput(name='password', type='password')
+    .form-group
+      label.formLabel Confirm Password:
+      br
+      input.formInput(name='pass_confirmation', type='password')
     br
-    input(type='submit', value='Submit')
+    input(type='submit', value='Register')

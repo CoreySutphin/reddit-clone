@@ -12,7 +12,9 @@ router.use(express.static(__parentDir + '/public')) // Include static files
 
 // Route for serving the user registration page
 router.get('/register', (req,res) => {
-  res.render('user-registration');
+  res.render('user-registration', {
+    title: 'register'
+  });
 });
 
 //User Registration
@@ -36,6 +38,7 @@ router.post('/register', [
   if(errors.length !== 0) {
     //If there are errors the template gets rendered again with the array of errors
     res.render('user-registration', {
+      title: 'register',
       errors: errors
     })
   } else {
@@ -52,8 +55,27 @@ router.post('/register', [
     //When the user is saved to the database
     //Password is hashed from the UserSchema file
     newUser.save((err, user) => {
+      //An Error will arise when either the username or email is already in the
+      //Database as the UserSchema fields are both unique
+      //The errors thrown are the same so need to search for both in the database
+      //In order to get individual error messages
       if(err) {
-        console.log(err);
+        let saveErrors = [];
+        User.find({username: newUser.username}, (err, userByUsername) => {
+          console.log(userByUsername);
+          if(userByUsername.length >= 1) {
+            saveErrors.push({msg:'User already exists!'});
+          }
+          User.find({email: newUser.email}, (err, userByEmail) => {
+            if(userByEmail.length >= 1) {
+              saveErrors.push({msg: 'Email already in use!'});
+            }
+            res.render('user-registration', {
+              title: 'register',
+              errors: saveErrors
+            })
+          });
+        });
       } else {
         console.log(user);
       }

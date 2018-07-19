@@ -22,7 +22,9 @@ router.get('*', (req,res,next) => {
 
 //Subreddit creation form
 router.get('/create', (req,res) => {
-  res.render('create_subreddit');
+  res.render('create_subreddit', {
+    title: 'create a subreddit',
+  });
 });
 
 router.post('/create', [
@@ -35,6 +37,7 @@ router.post('/create', [
   if(errors.length !== 0) {
     //If there are errors the template gets rendered again with the array of errors
     res.render('create_subreddit', {
+      title: 'create a subreddit',
       errors: errors
     });
   } else {
@@ -48,7 +51,6 @@ router.post('/create', [
 
     newSubreddit.save((err, subreddit) => {
       if (err) throw err;
-
       console.log(subreddit);
     });
 

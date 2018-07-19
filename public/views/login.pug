@@ -3,16 +3,18 @@ extends header
 block css 
   link(href='css/header-styles.css', rel='stylesheet')
   link(href='css/subreddit-styles.css', rel='stylesheet')
+  link(href='css/form-styles.css', rel='stylesheet')
 
 block content
-  h1 Login
   form(method='post', action='/uauth/login')
-    #form-group
-      label Username:
-      input(name='username', type='text')
-    #form-group
-      label Password:
-      input(name='password', type='password')
+    .form-group
+      label.formLabel Username:
+      br
+      input.formInput(name='username', type='text')
+    .form-group
+      label.formLabel Password:
+      br
+      input.formInput(name='password', type='password')
     br
     input(type='submit', value='Submit')
   
