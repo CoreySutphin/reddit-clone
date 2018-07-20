@@ -71,16 +71,21 @@ router.post('/create', [
 // Route for serving a specific subreddit
 router.get('/:subreddit', (req, res) => {
   let subredditName = req.params.subreddit;
-  Subreddit.findOne({ name: subredditName }, (err, subreddit) => {
+  Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
     if (err) throw err;
-    res.send(subreddit);
+
+    Post.find({ subreddit: subredditName }, (err, postsData) => {
+      if (err) throw err;
+
+      res.render('subreddit', { title: subredditData.title, subreddit: subredditData, posts: postsData });
+    });
   });
 });
 
 // Route for serving a subreddit with posts sorted by some condition
 router.get('/:subreddit/:condition', (req, res) => {
   let subredditName = req.params.subreddits;
-  let condition = req.params.conditions;
+  let condition = req.params.condition;
   Subreddit.findOne({ name: subredditName }, (err, subreddit) => {
     if (err) throw err;
 
