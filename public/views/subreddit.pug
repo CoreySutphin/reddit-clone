@@ -2,11 +2,15 @@ extends header.pug
 include post-mixin.pug
 
 block css 
-  link(href='css/header-styles.css', rel='stylesheet')
-  link(href='css/subreddit-styles.css', rel='stylesheet')
+  link(href='/css/header-styles.css', rel='stylesheet')
+  link(href='/css/subreddit-styles.css', rel='stylesheet')
 
 block content
   div.post-table
+    each post, index in posts
+      +post({"upvotes": post.upvotes, "downvotes": post.downvotes, 
+        "title": post.title, "timestamp": post.timestamp, "user": post.user, 
+        "subreddit": post.subreddit}, (index + 1))
     +post({"upvotes": 55, "downvotes": 22, "title": "TEST POST PLS IGNORE", 
       "timestamp": "2018-01-03", "user": "DieselDragon", "subreddit": "All"}, 1)
     +post({"upvotes": 55, "downvotes": 22, "title": "TEST POST PLS IGNORE", 

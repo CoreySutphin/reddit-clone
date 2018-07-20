@@ -11,4 +11,4 @@ mixin post(post, rank)
         p(class='tag-text')='Submitted ' + post.timestamp + ' by '
         a(class='tag-author' href!='user/' + post.user)=post.user
         p(class='tag-text')=' to '
-        a(class='tag-subreddit' href!='r/' + post.subreddit)='r/' + post.subreddit
+        a(class='tag-subreddit' href!=post.subreddit)='r/' + post.subreddit
