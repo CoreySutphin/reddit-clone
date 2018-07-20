@@ -27,6 +27,16 @@ router.get('/create', (req,res) => {
   });
 });
 
+router.get('/:subreddit/submit_text_post', (req,res) => {
+  let subredditName = req.params.subreddit;
+  res.render('submit_post', {
+    title: 'Submit text post',
+    subreddit: {
+      name: subredditName
+    }
+  });
+});
+
 router.post('/create', [
   check('name').not().isEmpty().withMessage('Name is required'),
   check('title').not().isEmpty().withMessage('Title is required'),
@@ -70,7 +80,7 @@ router.get('/:subreddit', (req, res) => {
 // Route for serving a subreddit with posts sorted by some condition
 router.get('/:subreddit/:condition', (req, res) => {
   let subredditName = req.params.subreddits;
-  let condition = req.params.subreddits;
+  let condition = req.params.conditions;
   Subreddit.findOne({ name: subredditName }, (err, subreddit) => {
     if (err) throw err;
 
@@ -94,7 +104,9 @@ router.get('/:subreddit/:condition', (req, res) => {
   });
 });
 
+
+
 // Route for serving a post's comments page
-router.get('/:subreddit/posts/:postId')
+//router.get('/:subreddit/posts/:postId')
 
 module.exports = router;

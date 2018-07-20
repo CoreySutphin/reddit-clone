@@ -62,7 +62,6 @@ router.post('/register', [
       if(err) {
         let saveErrors = [];
         User.find({username: newUser.username}, (err, userByUsername) => {
-          console.log(userByUsername);
           if(userByUsername.length >= 1) {
             saveErrors.push({msg:'User already exists!'});
           }

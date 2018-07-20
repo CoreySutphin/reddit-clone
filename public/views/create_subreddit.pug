@@ -10,7 +10,6 @@ block content
     ul
     each error in errors
       li= error.msg
-  h1 Create Subreddit
   form(method='post', action='/r/create')
     .form-group
       label.formLabel name:
