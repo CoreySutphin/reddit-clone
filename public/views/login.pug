@@ -1,11 +1,15 @@
 extends header
 
 block css 
-  link(href='css/header-styles.css', rel='stylesheet')
-  link(href='css/subreddit-styles.css', rel='stylesheet')
-  link(href='css/form-styles.css', rel='stylesheet')
+  link(href='/css/header-styles.css', rel='stylesheet')
+  link(href='/css/subreddit-styles.css', rel='stylesheet')
+  link(href='/css/form-styles.css', rel='stylesheet')
 
 block content
+  if errors
+    ul
+    each error in errors
+      li= error.msg
   form(method='post', action='/uauth/login')
     .form-group
       label.formLabel Username:

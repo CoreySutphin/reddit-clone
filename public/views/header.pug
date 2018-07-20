@@ -11,6 +11,6 @@ html(lang="en")
   body
     block header
       div.header
-        +top-navbar(subreddits)
-        +bottom-navbar(subreddit.name, "Best", "Hot", "New", "Rising", "Top")
+        +top-navbar(topBarSubreddits)
+        +bottom-navbar(title || subreddit.name, "Best", "Hot", "New", "Rising", "Top")
     block content

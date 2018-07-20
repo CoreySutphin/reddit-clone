@@ -5,6 +5,8 @@ const path = require('path');
 const { check, validationResult} = require('express-validator/check');
 
 __parentDir = path.dirname(process.mainModule.filename);
+
+//Models
 let Subreddit = require(path.join(__parentDir + '/models/SubredditSchema'));
 let Post = require(path.join(__parentDir + '/models/PostSchema'));
 
@@ -27,15 +29,7 @@ router.get('/create', (req,res) => {
   });
 });
 
-router.get('/:subreddit/submit_text_post', (req,res) => {
-  let subredditName = req.params.subreddit;
-  res.render('submit_post', {
-    title: 'Submit text post',
-    subreddit: {
-      name: subredditName
-    }
-  });
-});
+
 
 router.post('/create', [
   check('name').not().isEmpty().withMessage('Name is required'),
@@ -66,6 +60,58 @@ router.post('/create', [
 
     res.redirect('/');
   }
+});
+
+router.get('/:subreddit/submit_text_post', (req,res) => {
+  let subredditName = req.params.subreddit;
+  if (res.locals.user) {
+    res.render('submit_post', {
+      title: 'Submit text post',
+      subreddit: {
+        name: subredditName
+      }
+    });
+  } else {
+    res.render('login', {
+      title: 'login',
+      errors: [{msg: 'Must be logged in'}]
+    });
+  }
+});
+
+router.post('/:subreddit/submit_text_post',[
+  check('title').not().isEmpty().withMessage('Title is required')
+], (req, res) => {
+  let subredditName = req.params.subreddit;
+  const errors = validationResult(req).array();
+  if(errors.length !== 0) {
+    //If there are errors the template gets rendered again with the array of errors
+    res.render('submit_post', {
+      subreddit: {
+        name: subredditName
+      },
+      errors: errors
+    });
+  } else {
+    let title = req.body.title;
+    let content = req.body.content;
+
+    let newPost = new Post({
+      title: title,
+      content: content,
+      subreddit: subredditName,
+      user: res.locals.user.username
+    });
+
+    newPost.save((err, post) => {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log(post);
+      }
+    })
+  }
+
 });
 
 // Route for serving a specific subreddit

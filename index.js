@@ -38,6 +38,7 @@ mongoose.connect('mongodb://joseph:Woodside1@ds129831.mlab.com:29831/reddit-clon
 
 //Models
 let User = require('./models/UserSchema')
+let Posts = require('./models/PostSchema')
 
 //Sets a global user variable if user is logged in
 app.get('*', (req,res,next) => {
@@ -46,7 +47,7 @@ app.get('*', (req,res,next) => {
 
   //Sets a global variable of subreddits to either the users subscribedSubs
   //or default subs if no user logged in
-  res.locals.subreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
+  res.locals.topBarSubreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
   next();
 });
 
@@ -56,12 +57,19 @@ app.post('*', (req,res,next) => {
 
   //Sets a global variable of subreddits to either the users subscribedSubs
   //or default subs if no user logged in
-  res.locals.subreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
+  res.locals.topBarSubreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
   next();
 });
 
 app.get('/', (req, res) => {
-  res.render("subreddit");
+  Posts.find({}, (err, posts) => {
+    res.render("subreddit", {
+      subreddit: {
+        name: 'Home'
+      },
+      posts: posts
+    });
+  });
 });
 
 /* Route for serving a specific subreddit

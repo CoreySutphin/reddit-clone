@@ -13,7 +13,7 @@ router.use(express.static(__parentDir + '/public')) // Include static files
 // Route for serving the user registration page
 router.get('/register', (req,res) => {
   res.render('user-registration', {
-    title: 'register'
+    title: 'Register'
   });
 });
 
@@ -84,7 +84,9 @@ router.post('/register', [
 
 //Login route
 router.get('/login', (req,res) => {
-  res.render('login');
+  res.render('login', {
+    title: 'login'
+  });
 });
 
 //Login post Route
