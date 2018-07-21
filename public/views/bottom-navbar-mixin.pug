@@ -4,7 +4,7 @@ mixin bottom-navbar(title, ...tabs)
     span(class='page-name')=title
     ul(class='tab-menu')
       each tab in tabs
-        li: a(href!= title + '/' + tab)=tab
+        li: a(href!= title + '/sort/' + tab)=tab
         
   .botnav-right
     if user

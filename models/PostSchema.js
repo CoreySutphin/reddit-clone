@@ -2,12 +2,11 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
-  commentIds: [{ type: String, unique: true }],
-  title: String,
-  content: String,
-  subreddit: String,
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  subreddit: { type: String, required: true },
   timestamp: {type: Date, default: Date.now},
-  user: String,
+  user: { type: String, required: true },
   upvotes: {type: Number, default: 1},
   downvotes: {type: Number, default: 0}
 });

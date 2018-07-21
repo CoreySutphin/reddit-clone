@@ -9,6 +9,7 @@ __parentDir = path.dirname(process.mainModule.filename);
 //Models
 let Subreddit = require(path.join(__parentDir + '/models/SubredditSchema'));
 let Post = require(path.join(__parentDir + '/models/PostSchema'));
+let User = require(path.join(__parentDir + '/models/UserSchema'));
 
 router.use(express.static(__parentDir + '/public')) // Include static files
 
@@ -80,8 +81,8 @@ router.get('/:subreddit/submit_text_post', (req,res) => {
 });
 
 router.post('/:subreddit/submit_text_post',[
-  check('title').not().isEmpty().withMessage('Title is required')
-], (req, res) => {
+    check('title').not().isEmpty().withMessage('Title is required')
+  ], (req, res) => {
   let subredditName = req.params.subreddit;
   const errors = validationResult(req).array();
   if(errors.length !== 0) {
@@ -110,8 +111,10 @@ router.post('/:subreddit/submit_text_post',[
         console.log(post);
       }
     })
-  }
 
+    // Redirect back to subreddit
+    res.redirect('.');
+  }
 });
 
 // Route for serving a specific subreddit
@@ -129,7 +132,7 @@ router.get('/:subreddit', (req, res) => {
 });
 
 // Route for serving a subreddit with posts sorted by some condition
-router.get('/:subreddit/:condition', (req, res) => {
+router.get('/:subreddit/sort/:condition', (req, res) => {
   let subredditName = req.params.subreddits;
   let condition = req.params.condition;
   Subreddit.findOne({ name: subredditName }, (err, subreddit) => {

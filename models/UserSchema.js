@@ -4,15 +4,21 @@ var mongoose = require('mongoose'),
     SALT_WORK_FACTOR = 10;
 
 const UserSchema = new Schema({
-  username: {type: String, unique: true},
-  password: String,
-  email: {type:String, unique: true},
-  subscribedSubs: [{ type: String, unique: true }],
-  posts: [{ type: String, unique: true }],
-  comments: [{ type: String, unique: true }],
-  totalScore: { type: Number, default: 0},
-  accountCreationTimestamp:{ type: Date, default: Date.now}
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  subscribedSubs: [{ type: String, default: [] }],
+  totalScore: { type: Number, default: 0 },
+  accountCreationTimestamp:{ type: Date, default: Date.now }
 });
+
+// Checks to make sure a user isn't already subscribed to a subreddit
+UserSchema.methods.checkSubscribedSubs = function(user, sub, cb) {
+  this.model('Post').findOne({ username: user }, (err, userData) => {
+    if (err) return false;
+    return (userData.subscribedSubs.indexOf(sub) >  -1);
+  });
+}
 
 // Hashes the new account's password before sending it to the database
 UserSchema.pre('save', function(next) {

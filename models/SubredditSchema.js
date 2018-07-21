@@ -3,7 +3,6 @@ var Schema = mongoose.Schema;
 
 const SubredditSchema = new Schema({
   name: {type: String, required: true, unique: true},
-  posts: [{ type: String, unique: true }],
   numSubbed: {type: Number, default: 0},
   title: {type: String, required: true},
   description: {type: String, required: true},

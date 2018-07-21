@@ -59,7 +59,7 @@ router.post('/register', [
       //Database as the UserSchema fields are both unique
       //The errors thrown are the same so need to search for both in the database
       //In order to get individual error messages
-      if(err) {
+      if (err) {
         let saveErrors = [];
         User.find({username: newUser.username}, (err, userByUsername) => {
           if(userByUsername.length >= 1) {
@@ -77,6 +77,7 @@ router.post('/register', [
         });
       } else {
         console.log(user);
+        res.redirect('/');
       }
     });
   }
