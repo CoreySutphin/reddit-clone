@@ -7,7 +7,7 @@ block css
 
 block content
   div.post-table
-    each post, index in posts.reverse()
+    each post, index in posts
       +post({"upvotes": post.upvotes, "downvotes": post.downvotes, 
         "title": post.title, "timestamp": post.timestamp, "user": post.user, 
         "subreddit": post.subreddit}, (index + 1))

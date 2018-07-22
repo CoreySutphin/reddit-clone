@@ -123,38 +123,41 @@ router.get('/:subreddit', (req, res) => {
   Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
     if (err) throw err;
 
+    if (subredditData === null) {
+      res.render('404_error')
+    }
+
     Post.find({ subreddit: subredditName }, (err, postsData) => {
       if (err) throw err;
 
-      res.render('subreddit', { title: subredditData.title, subreddit: subredditData, posts: postsData });
+      res.render('subreddit', { title: subredditData.title, subreddit: subredditData, posts: postsData.reverse() });
     });
   });
 });
 
 // Route for serving a subreddit with posts sorted by some condition
 router.get('/:subreddit/sort/:condition', (req, res) => {
-  let subredditName = req.params.subreddits;
+  let subredditName = req.params.subreddit;
   let condition = req.params.condition;
-  Subreddit.findOne({ name: subredditName }, (err, subreddit) => {
+  Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
     if (err) throw err;
 
     // All Post objects submitted to this subreddit
-    var subredditPosts;
     Post.find({ subreddit: subredditName }, (err, postsData) => {
       if (err) throw err;
-      subredditPosts = postsData
-    });
+      switch (condition) {
+        case "Top":
+          // sort posts by score descending
+          postsData.sort(function compare(a, b) {
+            a.score = a.upvotes - a.downvotes;
+            b.score = b.upvotes - b.downvotes;
+            return b - a;
+          });
+          break;
+      }
 
-    switch (condition) {
-      case "Top":
-        // sort posts by score descending
-        subredditPosts.sort(function compare(a, b) {
-          a.score = a.upvotes - a.downvotes;
-          b.score = b.upvotes = b.downvotes;
-          return b - a;
-        });
-        break;
-    }
+      res.render('subreddit', { subreddit: subredditData, posts: postsData });
+    });
   });
 });
 

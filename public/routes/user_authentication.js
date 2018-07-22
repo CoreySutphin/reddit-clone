@@ -7,7 +7,6 @@ const { check, validationResult} = require('express-validator/check');
 __parentDir = path.dirname(process.mainModule.filename);
 let User = require(path.join(__parentDir + '/models/UserSchema'));
 
-
 router.use(express.static(__parentDir + '/public')) // Include static files
 
 // Route for serving the user registration page
@@ -17,8 +16,8 @@ router.get('/register', (req,res) => {
   });
 });
 
-//User Registration
-//Array of checks comes from express-validator
+// User Registration
+// Array of checks comes from express-validator
 router.post('/register', [
   check('email').not().isEmpty().withMessage('Email can\'t be empty'),
   check('email').isEmail().withMessage('Email isn\'t valid'),
@@ -33,16 +32,16 @@ router.post('/register', [
             }
         }).withMessage("Passwords don't match."),
 ], (req,res) => {
-  //Checks for errors
+  // Checks for errors
   const errors = validationResult(req).array();
   if(errors.length !== 0) {
-    //If there are errors the template gets rendered again with the array of errors
+    // If there are errors the template gets rendered again with the array of errors
     res.render('user-registration', {
       title: 'register',
       errors: errors
     })
   } else {
-    //If there are no errors with the input
+    // If there are no errors with the input
     let username = req.body.username;
     let email = req.body.email;
     let password = req.body.password;
@@ -52,13 +51,13 @@ router.post('/register', [
       password: password,
       email: email
     });
-    //When the user is saved to the database
-    //Password is hashed from the UserSchema file
+    // When the user is saved to the database
+    // Password is hashed from the UserSchema file
     newUser.save((err, user) => {
-      //An Error will arise when either the username or email is already in the
-      //Database as the UserSchema fields are both unique
-      //The errors thrown are the same so need to search for both in the database
-      //In order to get individual error messages
+      // An Error will arise when either the username or email is already in the
+      // Database as the UserSchema fields are both unique
+      // The errors thrown are the same so need to search for both in the database
+      // In order to get individual error messages
       if (err) {
         let saveErrors = [];
         User.find({username: newUser.username}, (err, userByUsername) => {
