@@ -3,7 +3,7 @@ mixin post(post, rank)
   .post
     span(class='rank')=rank
     .post-votes-info
-      span(class='score')=post.upvotes- post.downvotes
+      span(class='score')!=(post.upvotes - post.downvotes)
   
     .entry
       p(class='title')=post.title

@@ -1,10 +1,10 @@
-mixin bottom-navbar(title, ...tabs)
+mixin bottom-navbar(pageTitle, ...tabs)
   .botnav-left
     a(href='/' class='reddit-header') Reddit
-    span(class='page-name')=title
+    span(class='page-name')=pageTitle
     ul(class='tab-menu')
       each tab in tabs
-        li: a(href!= title + '/' + tab)=tab
+        li: a(href!= subreddit.name + '/sort/' + tab)=tab
         
   .botnav-right
     if user

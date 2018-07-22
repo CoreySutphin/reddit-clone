@@ -47,7 +47,7 @@ app.get('*', (req,res,next) => {
 
   //Sets a global variable of subreddits to either the users subscribedSubs
   //or default subs if no user logged in
-  res.locals.topBarSubreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
+  res.locals.topBarSubreddits = req.user ? defaultSubreddits.concat(req.user.subscribedSubs) : defaultSubreddits;
   next();
 });
 
