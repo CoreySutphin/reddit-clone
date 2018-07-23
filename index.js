@@ -11,6 +11,8 @@ const port = process.env.port || 3000;
 
 const app = express();
 
+global.appRoot = path.resolve(__dirname);
+
 app.set("view engine", "pug");
 app.set('views', path.join(__dirname, '/public/views'));
 
@@ -33,7 +35,6 @@ app.use(passport.session());
 mongoose.connect('mongodb://joseph:Woodside1@ds129831.mlab.com:29831/reddit-clone-cs', { useNewUrlParser: true },
  function(err) {
   if (err) throw err;
-  console.log("Successfully connected to MongoDB");
 });
 
 //Models
@@ -88,3 +89,5 @@ let uauth = require(path.join(__dirname + '/public/routes/user_authentication'))
 app.use('/uauth', uauth);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
+module.exports = app;
