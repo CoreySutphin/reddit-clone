@@ -4,14 +4,12 @@ const passport = require('passport');
 const path = require('path');
 const { check, validationResult} = require('express-validator/check');
 
-__parentDir = path.dirname(process.mainModule.filename);
-
 //Models
-let Subreddit = require(path.join(__parentDir + '/models/SubredditSchema'));
-let Post = require(path.join(__parentDir + '/models/PostSchema'));
-let User = require(path.join(__parentDir + '/models/UserSchema'));
+let Subreddit = require(path.join(appRoot + '/models/SubredditSchema'));
+let Post = require(path.join(appRoot + '/models/PostSchema'));
+let User = require(path.join(appRoot + '/models/UserSchema'));
 
-router.use(express.static(__parentDir + '/public')) // Include static files
+router.use(express.static(appRoot + '/public')) // Include static files
 
 router.get('*', (req,res,next) => {
   res.locals.user = req.user || null;
