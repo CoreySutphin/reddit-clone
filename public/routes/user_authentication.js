@@ -4,10 +4,9 @@ const passport = require('passport');
 const path = require('path');
 const { check, validationResult} = require('express-validator/check');
 
-__parentDir = path.dirname(process.mainModule.filename);
-let User = require(path.join(__parentDir + '/models/UserSchema'));
+let User = require(path.join(appRoot + '/models/UserSchema'));
 
-router.use(express.static(__parentDir + '/public')) // Include static files
+router.use(express.static(appRoot + '/public')) // Include static files
 
 // Route for serving the user registration page
 router.get('/register', (req,res) => {

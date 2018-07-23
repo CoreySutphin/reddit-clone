@@ -3,8 +3,9 @@ mixin bottom-navbar(pageTitle, ...tabs)
     a(href='/' class='reddit-header') Reddit
     span(class='page-name')=pageTitle
     ul(class='tab-menu')
-      each tab in tabs
-        li: a(href!= subreddit.name + '/sort/' + tab)=tab
+      if subreddit
+        each tab in tabs
+          li: a(href!= subreddit.name + '/sort/' + tab)=tab
         
   .botnav-right
     if user
