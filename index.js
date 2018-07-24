@@ -41,6 +41,9 @@ mongoose.connect('mongodb://joseph:Woodside1@ds129831.mlab.com:29831/reddit-clon
 let User = require('./models/UserSchema')
 let Posts = require('./models/PostSchema')
 
+//Utility functions
+let utility = require('./public/js/utility');
+
 //Sets a global user variable if user is logged in
 app.get('*', (req,res,next) => {
   res.locals.user = req.user || null;
@@ -49,6 +52,9 @@ app.get('*', (req,res,next) => {
   //Sets a global variable of subreddits to either the users subscribedSubs
   //or default subs if no user logged in
   res.locals.topBarSubreddits = req.user ? defaultSubreddits.concat(req.user.subscribedSubs) : defaultSubreddits;
+
+  //Adds the timeSince function to the locals to use in the templates
+  res.locals.timeSince = utility.timeSince;
   next();
 });
 

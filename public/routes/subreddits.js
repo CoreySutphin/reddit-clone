@@ -63,19 +63,32 @@ router.post('/create', [
 
 router.get('/:subreddit/submit_text_post', (req,res) => {
   let subredditName = req.params.subreddit;
-  if (res.locals.user) {
-    res.render('submit_post', {
-      title: 'Submit text post',
-      subreddit: {
-        name: subredditName
+  //First checks to see if the subreddit exists
+  Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
+    if (err) console.log(err);
+
+    //If the subreddit doesnt exist sends a 404 page
+    if (subredditData === null) {
+      res.render('404_error')
+    }
+    else {
+      //Subreddit exists, then checks if a user is logged in and sends the submit post page
+      if (res.locals.user) {
+        res.render('submit_post', {
+          title: 'Submit text post',
+          subreddit: {
+            name: subredditName
+          }
+        });
+        //If user is not logged in sends them to the login page
+      } else {
+        res.render('login', {
+          title: 'login',
+          errors: [{msg: 'Must be logged in'}]
+        });
       }
-    });
-  } else {
-    res.render('login', {
-      title: 'login',
-      errors: [{msg: 'Must be logged in'}]
-    });
-  }
+    }
+  });
 });
 
 router.post('/:subreddit/submit_text_post',[
@@ -124,12 +137,13 @@ router.get('/:subreddit', (req, res) => {
     if (subredditData === null) {
       res.render('404_error')
     }
+    else {
+      Post.find({ subreddit: subredditName }, (err, postsData) => {
+        if (err) throw err;
 
-    Post.find({ subreddit: subredditName }, (err, postsData) => {
-      if (err) throw err;
-
-      res.render('subreddit', { title: subredditData.title, subreddit: subredditData, posts: postsData.reverse() });
-    });
+        res.render('subreddit', { title: subredditData.title, subreddit: subredditData, posts: postsData.reverse() });
+      });
+    }
   });
 });
 
@@ -142,6 +156,7 @@ router.get('/:subreddit/sort/:condition', (req, res) => {
 
     // All Post objects submitted to this subreddit
     Post.find({ subreddit: subredditName }, (err, postsData) => {
+      console.log(postsData);
       if (err) throw err;
       switch (condition) {
         case "Top":
@@ -152,9 +167,15 @@ router.get('/:subreddit/sort/:condition', (req, res) => {
             return b - a;
           });
           break;
+
+        case "New":
+          postsData.sort(function(a, b) {
+            return b.timestamp.getTime() - a.timestamp.getTime();
+          });
+          break;
       }
 
-      res.render('subreddit', { subreddit: subredditData, posts: postsData });
+      res.render('subreddit', { title: subredditData.title, subreddit: subredditData, posts: postsData });
     });
   });
 });
