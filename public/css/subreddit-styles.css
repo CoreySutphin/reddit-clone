@@ -15,7 +15,7 @@ body {
   list-style-type: none;
 }
 
-/* CSS for posts on a subreddit */s
+/* CSS for posts on a subreddit */
 .post {
   margin-bottom: 8px;
   padding-left: 3px;
@@ -64,9 +64,11 @@ body {
   padding: 0px;
   overflow: hidden;
   unicode-bidi: isolate;
+  text-decoration: none;
 }
 
 .tag-line {
+  padding-top: 2px;
   font-size: 11px;
   line-height: 11px;
   color: #888;

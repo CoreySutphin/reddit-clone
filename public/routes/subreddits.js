@@ -140,7 +140,7 @@ router.get('/:subreddit', (req, res) => {
     else {
       Post.find({ subreddit: subredditName }, (err, postsData) => {
         if (err) throw err;
-
+        console.log(postsData);
         res.render('subreddit', { title: subredditData.title, subreddit: subredditData, posts: postsData.reverse() });
       });
     }

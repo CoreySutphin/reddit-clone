@@ -70,6 +70,7 @@ app.post('*', (req,res,next) => {
 
 app.get('/', (req, res) => {
   Posts.find({}, (err, posts) => {
+    console.log(posts);
     res.render("subreddit", {
       subreddit: {
         name: 'Home'
