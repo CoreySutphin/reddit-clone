@@ -61,12 +61,13 @@
 /*CSS for the reddit logo displayed in the header */
 .reddit-header {
   background-image: url('../images/reddit-logo.jpg');
-  background-size: 120px 40px;
+  background-size: 65px 40px;
+  background-repeat: no-repeat;
   height: 40px;
-  width: 120px;
+  width: 80px;
   display: inline-block;
   vertical-align: bottom;
-  margin-bottom: 3px;
+  margin-left: 10px;
 }
 
 /*.reddit-logo {
