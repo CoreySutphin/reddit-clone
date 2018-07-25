@@ -156,7 +156,6 @@ router.get('/:subreddit/sort/:condition', (req, res) => {
 
     // All Post objects submitted to this subreddit
     Post.find({ subreddit: subredditName }, (err, postsData) => {
-      console.log(postsData);
       if (err) throw err;
       switch (condition) {
         case "Top":

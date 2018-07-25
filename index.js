@@ -79,13 +79,6 @@ app.get('/', (req, res) => {
   });
 });
 
-/* Route for serving a specific subreddit
-app.get('/r/:subreddit', (req, res) => {
-  let subreddit = req.params.subreddit;
-  res.send(subreddit);
-});
-*/
-
 //Serve subreddit routes
 let subredditRoutes = require(path.join(__dirname + '/public/routes/subreddits'));
 app.use('/r', subredditRoutes);

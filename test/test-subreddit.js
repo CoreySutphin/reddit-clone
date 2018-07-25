@@ -12,6 +12,8 @@ const process = require('process');
 // Change working directory to project root folder
 process.chdir(path.join(__dirname, '..'));
 
+
+
 const Subreddit = require(path.join(path.dirname(__dirname) + '/models/SubredditSchema'));
 const Post = require(path.join(path.dirname(__dirname) + '/models/PostSchema'));
 const server = require('../index.js');
@@ -51,7 +53,8 @@ describe('Sorting Posts', function() {
   beforeEach(function(done) {
     var newPosts = [
       { title: 'Test1', content: 'TEST', subreddit: 'TempSub', user: 'tempUser', upvotes: 5 },
-      { title: 'Test2', content: 'TEST', subreddit: 'TempSub', user: 'tempUser' }
+      { title: 'Test2', content: 'TEST', subreddit: 'TempSub', user: 'tempUser' },
+      { title: 'Test3', content: 'TEST', subreddit: 'TempSub', user: 'tempUser', upvotes: 3 }
     ];
     Post.insertMany(newPosts, function(err, docs) {
       if (err) throw err;
@@ -60,7 +63,7 @@ describe('Sorting Posts', function() {
   });
 
   afterEach(function(done) {
-    Post.deleteMany({ title: { $in: ['Test1', 'Test2'] } }, function(err) {
+    Post.deleteMany({ title: { $in: ['Test1', 'Test2', 'Test3'] } }, function(err) {
       done();
     });
   });
