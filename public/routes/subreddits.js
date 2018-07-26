@@ -140,7 +140,6 @@ router.get('/:subreddit', (req, res) => {
     else {
       Post.find({ subreddit: subredditName }, (err, postsData) => {
         if (err) throw err;
-        console.log(postsData);
         res.render('subreddit', { title: subredditData.title, subreddit: subredditData, posts: postsData.reverse() });
       });
     }
@@ -148,7 +147,7 @@ router.get('/:subreddit', (req, res) => {
 });
 
 // Route for serving a subreddit with posts sorted by some condition
-router.get('/:subreddit/sort/:condition', (req, res) => {
+router.get('/:subreddit/:condition', (req, res) => {
   let subredditName = req.params.subreddit;
   let condition = req.params.condition;
   Subreddit.findOne({ name: subredditName }, (err, subredditData) => {

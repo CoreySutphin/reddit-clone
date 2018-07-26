@@ -5,7 +5,8 @@ mixin bottom-navbar(pageTitle, ...tabs)
     ul(class='tab-menu')
       if subreddit
         each tab in tabs
-          li: a(href!= subreddit.name + '/sort/' + tab)=tab
+          -console.log(subreddit.name)
+          li: a(href!= '/r/' + subreddit.name + '/' + tab)=tab
         
   .botnav-right
     if user
