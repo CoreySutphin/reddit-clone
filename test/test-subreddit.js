@@ -19,7 +19,7 @@ const Post = require(path.join(path.dirname(__dirname) + '/models/PostSchema'));
 const server = require('../index.js');
 
 const should = chai.should();
-const expect = chai.expect();
+const expect = chai.expect;
 chai.use(chaiHttp);
 
 // Replace with your db username and password
@@ -69,7 +69,35 @@ describe('Sorting Posts', function() {
   });
 
   it('should sort posts by their score with the highest rated score at the top', function(done) {
-    done();
+    chai.request(server)
+      .get('/r/TempSub/Top')
+      .set('test', 'true')
+      .end(function(err, res) {
+        Post.find({ subreddit: 'TempSub' }, function(err, postsData) {
+          postsData.sort(function compare(a, b) {
+            a.score = a.upvotes - a.downvotes;
+            b.score = b.upvotes - b.downvotes;
+            return b - a;
+          });
+          JSON.stringify(postsData).should.eql(JSON.stringify(res.body.data));
+          done();
+        });
+      });
+  });
+
+  it('should sort posts by timestamp with the newest posts at the top', function(done) {
+    chai.request(server)
+      .get('/r/TempSub/New')
+      .set('test', 'true')
+      .end(function(err, res) {
+        Post.find({ subreddit: 'TempSub' }, function(err, postsData) {
+          postsData.sort(function(a, b) {
+            return b.timestamp.getTime() - a.timestamp.getTime();
+          });
+          JSON.stringify(postsData).should.eql(JSON.stringify(res.body.data));
+          done();
+        });
+      });
   });
 
 });

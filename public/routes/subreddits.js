@@ -54,7 +54,6 @@ router.post('/create', [
 
     newSubreddit.save((err, subreddit) => {
       if (err) throw err;
-      console.log(subreddit);
     });
 
     res.redirect('/');
@@ -173,7 +172,13 @@ router.get('/:subreddit/:condition', (req, res) => {
           break;
       }
 
-      res.render('subreddit', { title: subredditData.title, subreddit: subredditData, posts: postsData });
+      // If it's a test call just send the array of posts, else render the subreddit view
+      if (req.headers.test === 'true'){
+        res.send({ data: postsData });
+      }
+      else {
+        res.render('subreddit', { title: subredditData.title, subreddit: subredditData, posts: postsData });
+      }
     });
   });
 });
