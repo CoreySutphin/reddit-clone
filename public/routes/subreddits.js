@@ -23,9 +23,16 @@ router.get('*', (req,res,next) => {
 
 //Subreddit creation form
 router.get('/create', (req,res) => {
-  res.render('create_subreddit', {
-    title: 'create a subreddit',
-  });
+  if(res.locals.user) {
+    res.render('create_subreddit', {
+      title: 'create a subreddit',
+    });
+  } else {
+    res.render('login', {
+      title: 'Login',
+      errors: [{msg: 'Must be logged in to create subreddit'}]
+    });
+  }
 });
 
 
