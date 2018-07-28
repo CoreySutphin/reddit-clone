@@ -1,17 +1,19 @@
 extends header.pug
 include post-mixin.pug
+include sidebar-mixin.pug
 
 block css 
   link(href='/css/header-styles.css', rel='stylesheet')
   link(href='/css/subreddit-styles.css', rel='stylesheet')
+  link(href='/css/sidebar-styles.css', rel='stylesheet')
 
 block content
+  +sidebar(subreddit)
   div.post-table
     each post, index in posts
       +post({"upvotes": post.upvotes, "downvotes": post.downvotes,"_id": post._id, 
         "title": post.title, "timestamp": post.timestamp, "user": post.user, 
         "subreddit": post.subreddit}, (index + 1))
     
-  div.testdiv
   footer
     p section
