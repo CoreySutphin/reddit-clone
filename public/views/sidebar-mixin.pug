@@ -1,0 +1,17 @@
+mixin sidebar(subreddit)
+  .sidebarContainer
+    .searchBarPH
+      p Search functionality coming soon&trade;
+    if !user
+      form.loginDiv(method='post', action='/uauth/login')
+        input.sidebarInput(name='username', type='text', placeholder='username')
+        input.sidebarInput(name='password', type='password', placeholder='password')
+        .sidebarInput
+          input(name='rememberMe', type='checkbox')
+          label(for='rememberMe' id='rememberMe') remember me
+        input.sidebarInput(name='submit', type='submit', value='login', id='sidebarLogin')
+    .submit_text_post
+      a(href='/r/' + subreddit.name + '/submit_text_post') Submit a new text post
+    .sidebarInfo
+      p= subreddit.sidebar
+      
