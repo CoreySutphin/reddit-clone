@@ -96,18 +96,3 @@ describe('User Authentication', function() {
   });
 
 });
-
-describe('Authorized API endpoints', function() {
-
-  it('should redirect unauthenticated users who attempt to access the subreddit creation form',
-  function(done) {
-    chai.request(server)
-    .get('/r/create')
-    .end(function(err, res) {
-      should.exist(res);
-      res.redirects.should.not.eql([]);
-      done();
-    });
-  });
-
-});
