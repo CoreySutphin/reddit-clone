@@ -1,6 +1,9 @@
+a {
+  text-decoration: none;
+}
 /*Top level container for the whole sidebar */
 .sidebarContainer {
-  width: 18vw;
+  width: 16vw;
   height: auto;
   min-height: 20vh;
   float: right;
@@ -12,10 +15,60 @@
 
 /*Div placeholder for the searchbar */
 .searchBarPH {
-  border: 1px solid black;
-  width: 80%;
+  border: 1px solid gray;
+  width: 90%;
   height: 3vh;
+  min-height: 30px;
   margin-top: 5px;
   text-align: center;
-  vertical-align: middle;
+}
+
+/*The div that contains the login form to be shown in the sidebar if a user is not logged in */
+.loginDiv {
+  height: 6vh;
+  width: 90%;
+  min-height: 50px;
+  margin-top: 10px;
+  border: 1px solid gray;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+/*The input boxes, username, password, submit */
+.sidebarInput {
+  width: 45%;
+  height: 2vh;
+  margin-top: 3px;
+}
+
+/*The submission button */
+#sidebarLogin {
+  width: 20%;
+}
+
+/*The submit text post div */
+.submit_text_post {
+  width: 90%;
+  height: 3vh;
+  min-height: 30px;
+  background-color: #CEE3F8;
+  margin-top: 10px;
+  border: 1px solid #369;
+  text-align: center;
+}
+
+.submit_text_post a {
+  font-size: 150%;
+  font-weight: bold;
+  color: #369;
+  line-height: 29px;
+  letter-spacing: -1px;
+}
+
+.sidebarInfo {
+  width: 90%;
+  height: auto;
+  border: 1px solid gray;
+  margin-top: 10px;
 }

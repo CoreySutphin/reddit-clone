@@ -8,7 +8,7 @@ block css
   link(href='/css/sidebar-styles.css', rel='stylesheet')
 
 block content
-  +sidebar({msg: 'Example text'})
+  +sidebar(subreddit)
   div.post-table
     each post, index in posts
       +post({"upvotes": post.upvotes, "downvotes": post.downvotes,"_id": post._id, 
