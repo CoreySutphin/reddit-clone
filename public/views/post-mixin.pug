@@ -9,6 +9,6 @@ mixin post(post, rank)
       a(class='title', href='/post/' + post._id)=post.title
       .tag-line 
         p(class='tag-text')='Submitted ' + timeSince(post.timestamp) + ' by '
-        a(class='tag-author' href!='user/' + post.user)=post.user
+        a(class='tag-author' href!='/user/' + post.user)=post.user
         p(class='tag-text')=' to '
-        a(class='tag-subreddit' href!='r/' + post.subreddit)='r/' + post.subreddit
+        a(class='tag-subreddit' href!=post.subreddit)='r/' + post.subreddit
