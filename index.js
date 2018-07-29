@@ -38,8 +38,9 @@ mongoose.connect('mongodb://joseph:Woodside1@ds129831.mlab.com:29831/reddit-clon
 });
 
 //Models
-let User = require('./models/UserSchema')
-let Posts = require('./models/PostSchema')
+let User = require('./models/UserSchema');
+let Posts = require('./models/PostSchema');
+let Subreddit = require('./models/SubredditSchema');
 
 //Utility functions
 let utility = require('./public/js/utility');
@@ -68,8 +69,47 @@ app.post('*', (req,res,next) => {
   next();
 });
 
+/*
+  The landing page/home subreddit route
+*/
 app.get('/', (req, res) => {
-  Posts.find({}, (err, posts) => {
+  Subreddit.findOne({name: 'home'}, (err,subredditData) => {
+    if (err) {
+      console.log('subreddit find in /, err: ' + err);
+    } else {
+      /*
+        If user is logged in will display all posts in the users' subscribedSubs
+      */
+      if(res.locals.user) {
+        Posts.find({subreddit: { $in: res.locals.user.subscribedSubs}}, (err, postsData) => {
+          if (err) {
+            console.log('Logged in users Posts find in /, err: ' + err);
+          } else {
+            res.render('subreddit', {
+              subreddit: subredditData,
+              posts: postsData
+            });
+          }
+        });
+        /*
+          If user is not logged in will display all posts
+        */
+      } else {
+        Posts.find({}, (err, postsData) => {
+          if(err) {
+            console.log('Not logged in Posts find in /, err:' + err);
+          } else {
+            res.render('subreddit', {
+              subreddit: subredditData,
+              posts: postsData
+            });
+          }
+        });
+      }
+    }
+  });
+
+  /*Posts.find({}, (err, posts) => {
     console.log(posts);
     res.render("subreddit", {
       subreddit: {
@@ -77,7 +117,7 @@ app.get('/', (req, res) => {
       },
       posts: posts
     });
-  });
+  }); */
 });
 
 //Serve subreddit routes

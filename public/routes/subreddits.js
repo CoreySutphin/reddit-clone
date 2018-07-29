@@ -11,6 +11,7 @@ let User = require(path.join(appRoot + '/models/UserSchema'));
 
 router.use(express.static(appRoot + '/public')) // Include static files
 
+
 router.get('*', (req,res,next) => {
   res.locals.user = req.user || null;
   let defaultSubreddits = ['Funny', 'News','Gaming'];
@@ -18,6 +19,7 @@ router.get('*', (req,res,next) => {
   //Sets a global variable of subreddits to either the users subscribedSubs
   //or default subs if no user logged in
   res.locals.subreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
+
   next();
 });
 
@@ -137,19 +139,23 @@ router.post('/:subreddit/submit_text_post',[
 // Route for serving a specific subreddit
 router.get('/:subreddit', (req, res) => {
   let subredditName = req.params.subreddit;
-  Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
-    if (err) throw err;
+  if (subredditName === 'home') {
+    res.redirect('/');
+  } else {
+    Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
+      if (err) throw err;
 
-    if (subredditData === null) {
-      res.render('404_error')
-    }
-    else {
-      Post.find({ subreddit: subredditName }, (err, postsData) => {
-        if (err) throw err;
-        res.render('subreddit', { title: subredditData.title, subreddit: subredditData, posts: postsData.reverse() });
-      });
-    }
-  });
+      if (subredditData === null) {
+        res.render('404_error')
+      }
+      else {
+        Post.find({ subreddit: subredditName }, (err, postsData) => {
+          if (err) throw err;
+          res.render('subreddit', { title: subredditData.title, subreddit: subredditData, posts: postsData.reverse() });
+        });
+      }
+    });
+  }
 });
 
 // Route for serving a subreddit with posts sorted by some condition

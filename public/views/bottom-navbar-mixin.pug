@@ -1,7 +1,10 @@
 mixin bottom-navbar(pageTitle, ...tabs)
   .botnav-left
     a(href='/' class='reddit-header')
-    span(class='page-name')=pageTitle
+    if subreddit
+      a(href='/r/' + subreddit.name  class='page-name')=pageTitle
+    else
+      span(class='page-name')=pageTitle
     ul(class='tab-menu')
       if subreddit
         each tab in tabs
