@@ -12,8 +12,6 @@ const process = require('process');
 // Change working directory to project root folder
 process.chdir(path.join(__dirname, '..'));
 
-
-
 const Subreddit = require(path.join(path.dirname(__dirname) + '/models/SubredditSchema'));
 const Post = require(path.join(path.dirname(__dirname) + '/models/PostSchema'));
 const server = require('../index.js');

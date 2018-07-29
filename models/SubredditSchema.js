@@ -9,4 +9,10 @@ const SubredditSchema = new Schema({
   sidebar: {type: String, required: true}
 });
 
+SubredditSchema.pre('save', function(next) {
+  var subreddit = this;
+  this.name = this.name.toLowerCase();
+  next();
+})
+
 module.exports = mongoose.model("Subreddit", SubredditSchema, "subreddits");
