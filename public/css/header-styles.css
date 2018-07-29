@@ -113,6 +113,11 @@
   font-variant: small-caps;
   font-size: 1.2em;
   vertical-align: bottom;
+  color: black;
+}
+
+.page-name:hover {
+  text-decoration: underline;
 }
 
 .botnav-right {
