@@ -7,7 +7,6 @@ a {
   height: auto;
   min-height: 20vh;
   float: right;
-  background-color: lightblue;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,6 +68,18 @@ a {
 .sidebarInfo {
   width: 90%;
   height: auto;
-  border: 1px solid gray;
   margin-top: 10px;
+  font-size: 150%;
+  margin-bottom: 10px;
+}
+
+.subredditName {
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 50px;
+}
+
+.subredditName:hover {
+  text-decoration: underline;
 }
