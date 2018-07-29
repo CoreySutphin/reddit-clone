@@ -76,7 +76,7 @@ describe('User Authentication', function() {
       .send({ username: 'TEST123456789', password: 'TEST' })
       .end(function(err, res) {
         should.exist(res);
-        res.req.path.should.equal('/')
+        res.req.path.should.equal('/r/home')
         res.should.have.status(200);
         done();
       });
