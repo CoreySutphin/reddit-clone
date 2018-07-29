@@ -54,8 +54,7 @@ router.post('/create', [
     });
   } else {
     let newSubreddit = new Subreddit({
-      name: req.body.name,
-      posts: [],
+      name: req.body.name.toLowerCase(),
       title: req.body.title,
       description: req.body.description,
       sidebar: req.body.sidebar
@@ -70,7 +69,7 @@ router.post('/create', [
 });
 
 router.get('/:subreddit/submit_text_post', (req,res) => {
-  let subredditName = req.params.subreddit;
+  let subredditName = req.params.subreddit.toLowerCase();
   //First checks to see if the subreddit exists
   Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
     if (err) console.log(err);
@@ -102,8 +101,11 @@ router.get('/:subreddit/submit_text_post', (req,res) => {
 router.post('/:subreddit/submit_text_post',[
     check('title').not().isEmpty().withMessage('Title is required')
   ], (req, res) => {
-  let subredditName = req.params.subreddit;
+  let subredditName = req.params.subreddit.toLowerCase();
   const errors = validationResult(req).array();
+  if (subredditName === 'home') {
+    errors.push('Cannot post to r/home');
+  }
   if(errors.length !== 0) {
     //If there are errors the template gets rendered again with the array of errors
     res.render('submit_post', {
@@ -136,11 +138,41 @@ router.post('/:subreddit/submit_text_post',[
   }
 });
 
+// Route for serving the home page
+router.get('/home', (req, res) => {
+  Subreddit.findOne({ name: 'home' }, (err, subredditData) => {
+    if (err) throw err;
+    // If user is logged in will display all posts in the users' subscribedSubs
+    if (res.locals.user) {
+      Post.find({ subreddit: { $in: res.locals.user.subscribedSubs } }, (err, postsData) => {
+        if (err) throw err;
+        postsData = shuffle(postsData);
+        res.render('subreddit', {
+          title: subredditData.title,
+          subreddit: subredditData,
+          posts: postsData
+        });
+      });
+    // If user is not logged in will display posts from all subreddits
+    } else {
+      Post.find({}, (err, postsData) => {
+        if (err) throw err;
+        postsData = shuffle(postsData);
+        res.render('subreddit', {
+          title: subredditData.title,
+          subreddit: subredditData,
+          posts: postsData
+        });
+      });
+    }
+  });
+});
+
 // Route for serving a specific subreddit
 router.get('/:subreddit', (req, res) => {
-  let subredditName = req.params.subreddit;
+  let subredditName = req.params.subreddit.toLowerCase();
   if (subredditName === 'home') {
-    res.redirect('/');
+    res.redirect('/home');
   } else {
     Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
       if (err) throw err;
@@ -158,9 +190,40 @@ router.get('/:subreddit', (req, res) => {
   }
 });
 
+// Route for sorting posts on the home page
+router.get('/home/:condition', (req, res) => {
+  let condition = req.params.condition;
+
+  Subreddit.findOne({ name: 'home' }, (err, subredditData) => {
+    // If user is logged in will display all posts in the users' subscribedSubs
+    if (res.locals.user) {
+      Post.find({ subreddit: { $in: res.locals.user.subscribedSubs } }, (err, postsData) => {
+        if (err) throw err;
+        postsData = sortPosts(postsData, condition);
+        res.render('subreddit', {
+          title: subredditData.title,
+          subreddit: subredditData,
+          posts: postsData
+        });
+      });
+    // If user is not logged in will display posts from all subreddits
+    } else {
+      Post.find({}, (err, postsData) => {
+        if (err) throw err;
+        postsData = sortPosts(postsData, condition);
+        res.render('subreddit', {
+          title: subredditData.title,
+          subreddit: subredditData,
+          posts: postsData
+        });
+      });
+    }
+  });
+});
+
 // Route for serving a subreddit with posts sorted by some condition
 router.get('/:subreddit/:condition', (req, res) => {
-  let subredditName = req.params.subreddit;
+  let subredditName = req.params.subreddit.toLowerCase();
   let condition = req.params.condition;
   Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
     if (err) throw err;
@@ -168,23 +231,7 @@ router.get('/:subreddit/:condition', (req, res) => {
     // All Post objects submitted to this subreddit
     Post.find({ subreddit: subredditName }, (err, postsData) => {
       if (err) throw err;
-      switch (condition) {
-        case "Top":
-          // sort posts by score descending
-          postsData.sort(function compare(a, b) {
-            a.score = a.upvotes - a.downvotes;
-            b.score = b.upvotes - b.downvotes;
-            return b - a;
-          });
-          break;
-
-        case "New":
-          postsData.sort(function(a, b) {
-            return b.timestamp.getTime() - a.timestamp.getTime();
-          });
-          break;
-      }
-
+      postsData = sortPosts(postsData, condition);
       // If it's a test call just send the array of posts, else render the subreddit view
       if (req.headers.test === 'true'){
         res.send({ data: postsData });
@@ -196,7 +243,38 @@ router.get('/:subreddit/:condition', (req, res) => {
   });
 });
 
+// Used to shuffle posts pulled for the home page, attempts to shuffle so there's not a sequence of posts
+// from the same subreddit
+function shuffle(array) {
+  for (var i = 0; i < array.length/2; i += 2 ) {
+    var b = array[array.length - 1 - i];
+    array[array.length -1 - i] = array[i];
+    array[i] = b;
+  }
+  return array;
+}
 
+// Sorts posts by a user-supplied condition
+function sortPosts(posts, condition) {
+  switch (condition) {
+    case "Top":
+      // sort posts by score descending
+      posts.sort(function compare(a, b) {
+        a.score = a.upvotes - a.downvotes;
+        b.score = b.upvotes - b.downvotes;
+        return b - a;
+      });
+      break;
+
+    case "New":
+      posts.sort(function(a, b) {
+        return b.timestamp.getTime() - a.timestamp.getTime();
+      });
+      break;
+  }
+
+  return posts;
+}
 
 // Route for serving a post's comments page
 //router.get('/:subreddit/posts/:postId')

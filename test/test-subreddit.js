@@ -12,8 +12,6 @@ const process = require('process');
 // Change working directory to project root folder
 process.chdir(path.join(__dirname, '..'));
 
-
-
 const Subreddit = require(path.join(path.dirname(__dirname) + '/models/SubredditSchema'));
 const Post = require(path.join(path.dirname(__dirname) + '/models/PostSchema'));
 const server = require('../index.js');
@@ -32,7 +30,7 @@ describe('Sorting Posts', function() {
 
   before(function(done) {
     var newSubreddit = new Subreddit({
-      name: 'TempSub',
+      name: 'tempsub',
       title: 'TEMP',
       description: 'TEST',
       sidebar: 'TEST'
@@ -45,16 +43,16 @@ describe('Sorting Posts', function() {
   });
 
   after(function(done) {
-    Subreddit.model('Subreddit').findOneAndRemove({ name: 'TempSub' }, function(err) {
+    Subreddit.model('Subreddit').findOneAndRemove({ name: 'tempsub' }, function(err) {
       done();
     });
   });
 
   beforeEach(function(done) {
     var newPosts = [
-      { title: 'Test1', content: 'TEST', subreddit: 'TempSub', user: 'tempUser', upvotes: 5 },
-      { title: 'Test2', content: 'TEST', subreddit: 'TempSub', user: 'tempUser' },
-      { title: 'Test3', content: 'TEST', subreddit: 'TempSub', user: 'tempUser', upvotes: 3 }
+      { title: 'Test1', content: 'TEST', subreddit: 'tempsub', user: 'tempUser', upvotes: 5 },
+      { title: 'Test2', content: 'TEST', subreddit: 'tempsub', user: 'tempUser' },
+      { title: 'Test3', content: 'TEST', subreddit: 'tempsub', user: 'tempUser', upvotes: 3 }
     ];
     Post.insertMany(newPosts, function(err, docs) {
       if (err) throw err;
@@ -70,10 +68,10 @@ describe('Sorting Posts', function() {
 
   it('should sort posts by their score with the highest rated score at the top', function(done) {
     chai.request(server)
-      .get('/r/TempSub/Top')
+      .get('/r/tempsub/Top')
       .set('test', 'true')
       .end(function(err, res) {
-        Post.find({ subreddit: 'TempSub' }, function(err, postsData) {
+        Post.find({ subreddit: 'tempsub' }, function(err, postsData) {
           postsData.sort(function compare(a, b) {
             a.score = a.upvotes - a.downvotes;
             b.score = b.upvotes - b.downvotes;
@@ -87,10 +85,10 @@ describe('Sorting Posts', function() {
 
   it('should sort posts by timestamp with the newest posts at the top', function(done) {
     chai.request(server)
-      .get('/r/TempSub/New')
+      .get('/r/tempsub/New')
       .set('test', 'true')
       .end(function(err, res) {
-        Post.find({ subreddit: 'TempSub' }, function(err, postsData) {
+        Post.find({ subreddit: 'tempsub' }, function(err, postsData) {
           postsData.sort(function(a, b) {
             return b.timestamp.getTime() - a.timestamp.getTime();
           });

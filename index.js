@@ -73,51 +73,7 @@ app.post('*', (req,res,next) => {
   The landing page/home subreddit route
 */
 app.get('/', (req, res) => {
-  Subreddit.findOne({name: 'home'}, (err,subredditData) => {
-    if (err) {
-      console.log('subreddit find in /, err: ' + err);
-    } else {
-      /*
-        If user is logged in will display all posts in the users' subscribedSubs
-      */
-      if(res.locals.user) {
-        Posts.find({subreddit: { $in: res.locals.user.subscribedSubs}}, (err, postsData) => {
-          if (err) {
-            console.log('Logged in users Posts find in /, err: ' + err);
-          } else {
-            res.render('subreddit', {
-              subreddit: subredditData,
-              posts: postsData
-            });
-          }
-        });
-        /*
-          If user is not logged in will display all posts
-        */
-      } else {
-        Posts.find({}, (err, postsData) => {
-          if(err) {
-            console.log('Not logged in Posts find in /, err:' + err);
-          } else {
-            res.render('subreddit', {
-              subreddit: subredditData,
-              posts: postsData
-            });
-          }
-        });
-      }
-    }
-  });
-
-  /*Posts.find({}, (err, posts) => {
-    console.log(posts);
-    res.render("subreddit", {
-      subreddit: {
-        name: 'Home'
-      },
-      posts: posts
-    });
-  }); */
+  res.redirect('/r/home');
 });
 
 //Serve subreddit routes
