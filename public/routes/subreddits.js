@@ -54,7 +54,7 @@ router.post('/create', [
     });
   } else {
     let newSubreddit = new Subreddit({
-      name: req.body.name,
+      name: req.body.name.toLowerCase(),
       posts: [],
       title: req.body.title,
       description: req.body.description,
@@ -70,39 +70,44 @@ router.post('/create', [
 });
 
 router.get('/:subreddit/submit_text_post', (req,res) => {
-  let subredditName = req.params.subreddit;
-  //First checks to see if the subreddit exists
-  Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
-    if (err) console.log(err);
+  let subredditName = req.params.subreddit.toLowerCase();
+  //home is special in that it shouldn't have any posts associated with it
+  if (subredditName === 'home') {
+    res.redirect('/');
+  } else {
+    //First checks to see if the subreddit exists
+    Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
+      if (err) console.log(err);
 
-    //If the subreddit doesnt exist sends a 404 page
-    if (subredditData === null) {
-      res.render('404_error')
-    }
-    else {
-      //Subreddit exists, then checks if a user is logged in and sends the submit post page
-      if (res.locals.user) {
-        res.render('submit_post', {
-          title: 'Submit text post',
-          subreddit: {
-            name: subredditName
-          }
-        });
-        //If user is not logged in sends them to the login page
-      } else {
-        res.render('login', {
-          title: 'login',
-          errors: [{msg: 'Must be logged in'}]
-        });
+      //If the subreddit doesnt exist sends a 404 page
+      if (subredditData === null) {
+        res.render('404_error')
       }
-    }
-  });
+      else {
+        //Subreddit exists, then checks if a user is logged in and sends the submit post page
+        if (res.locals.user) {
+          res.render('submit_post', {
+            title: 'Submit text post',
+            subreddit: {
+              name: subredditName
+            }
+          });
+          //If user is not logged in sends them to the login page
+        } else {
+          res.render('login', {
+            title: 'login',
+            errors: [{msg: 'Must be logged in'}]
+          });
+        }
+      }
+    });
+  }
 });
 
 router.post('/:subreddit/submit_text_post',[
     check('title').not().isEmpty().withMessage('Title is required')
   ], (req, res) => {
-  let subredditName = req.params.subreddit;
+  let subredditName = req.params.subreddit.toLowerCase();
   const errors = validationResult(req).array();
   if(errors.length !== 0) {
     //If there are errors the template gets rendered again with the array of errors
@@ -138,7 +143,7 @@ router.post('/:subreddit/submit_text_post',[
 
 // Route for serving a specific subreddit
 router.get('/:subreddit', (req, res) => {
-  let subredditName = req.params.subreddit;
+  let subredditName = req.params.subreddit.toLowerCase();
   if (subredditName === 'home') {
     res.redirect('/');
   } else {
@@ -160,7 +165,7 @@ router.get('/:subreddit', (req, res) => {
 
 // Route for serving a subreddit with posts sorted by some condition
 router.get('/:subreddit/:condition', (req, res) => {
-  let subredditName = req.params.subreddit;
+  let subredditName = req.params.subreddit.toLowerCase();
   let condition = req.params.condition;
   Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
     if (err) throw err;
