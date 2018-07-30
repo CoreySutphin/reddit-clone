@@ -48,11 +48,11 @@ let utility = require('./public/js/utility');
 //Sets a global user variable if user is logged in
 app.get('*', (req,res,next) => {
   res.locals.user = req.user || null;
-  let defaultSubreddits = ['Funny', 'News','Gaming'];
+  let defaultSubreddits = ['funny', 'news', 'gaming'];
 
   //Sets a global variable of subreddits to either the users subscribedSubs
   //or default subs if no user logged in
-  res.locals.topBarSubreddits = req.user ? defaultSubreddits.concat(req.user.subscribedSubs) : defaultSubreddits;
+  res.locals.topBarSubreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
 
   //Adds the timeSince function to the locals to use in the templates
   res.locals.timeSince = utility.timeSince;
@@ -61,7 +61,7 @@ app.get('*', (req,res,next) => {
 
 app.post('*', (req,res,next) => {
   res.locals.user = req.user || null;
-  let defaultSubreddits = ['Funny', 'News','Gaming'];
+  let defaultSubreddits = ['funny', 'news', 'gaming'];
 
   //Sets a global variable of subreddits to either the users subscribedSubs
   //or default subs if no user logged in

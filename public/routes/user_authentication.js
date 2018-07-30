@@ -48,7 +48,8 @@ router.post('/register', [
     let newUser = new User({
       username: username,
       password: password,
-      email: email
+      email: email,
+      subscribedSubs: ['funny', 'news', 'gaming', 'rva'] //These are our default subreddits 
     });
     // When the user is saved to the database
     // Password is hashed from the UserSchema file

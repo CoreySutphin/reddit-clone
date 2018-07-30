@@ -6,4 +6,5 @@ mixin top-navbar([...subreddits])
           li
             if index != 0
               span(class='separator') - 
-            a(href!='r/' + subreddit)= subreddit
+            // must be ../r/ to tell link to go to home route
+            a(href!= '../r/' + subreddit)= subreddit

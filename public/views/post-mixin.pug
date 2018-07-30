@@ -3,7 +3,9 @@ mixin post(post, rank)
   .post
     span(class='rank')=rank
     .post-votes-info
+      .arrow-up
       span(class='score')!=(post.upvotes - post.downvotes)
+      .arrow-down
   
     .entry
       a(class='title', href='/post/' + post._id)=post.title

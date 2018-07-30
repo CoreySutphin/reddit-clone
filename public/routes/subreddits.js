@@ -281,7 +281,4 @@ function sortPosts(posts, condition) {
   return posts;
 }
 
-// Route for serving a post's comments page
-//router.get('/:subreddit/posts/:postId')
-
 module.exports = router;

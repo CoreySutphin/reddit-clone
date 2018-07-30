@@ -32,6 +32,7 @@ body {
   overflow: hidden;
 }
 
+/*Container for upvote/downvote arrows and score */
 .post-votes-info {
   width: 6.1ex;
   font-weight: bold;
@@ -41,6 +42,31 @@ body {
   margin-left: 7px;
   background: transparent;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*Upvote arrow */
+.arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 9px solid gray;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+/*Downvote arrow */
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 9px solid gray;
+  margin-top: 3px;
+  margin-bottom: 2px;
 }
 
 .score {
