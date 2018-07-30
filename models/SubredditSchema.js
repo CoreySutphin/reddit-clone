@@ -12,7 +12,14 @@ const SubredditSchema = new Schema({
 SubredditSchema.pre('save', function(next) {
   var subreddit = this;
   this.name = this.name.toLowerCase();
-  next();
-})
+
+  this.model('Subreddit').findOne({ name: this.name }, (err, subredditData) => {
+    if (err) {
+      next(err);
+    } else {
+      next();
+    }
+  });
+});
 
 module.exports = mongoose.model("Subreddit", SubredditSchema, "subreddits");

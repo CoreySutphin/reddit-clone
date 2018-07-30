@@ -190,7 +190,7 @@ router.get('/:subreddit', (req, res) => {
   }
 });
 
-// Route for sorting posts on the home page
+ // Route for sorting posts on the home page
 router.get('/home/:condition', (req, res) => {
   let condition = req.params.condition;
 
@@ -225,6 +225,11 @@ router.get('/home/:condition', (req, res) => {
 router.get('/:subreddit/:condition', (req, res) => {
   let subredditName = req.params.subreddit.toLowerCase();
   let condition = req.params.condition;
+  // Checks if something besides a valid condition was passed in
+  if (!['Top', 'New', 'Best', 'Hot'].includes(condition)) {
+    res.redirect('/r/' + subredditName);
+    return;
+  }
   Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
     if (err) throw err;
 
