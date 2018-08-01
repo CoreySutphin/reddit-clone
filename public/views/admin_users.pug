@@ -1,0 +1,28 @@
+extends header
+
+block css 
+  link(href='/css/header-styles.css', rel='stylesheet')
+  link(href='/css/subreddit-styles.css', rel='stylesheet')
+  link(href='/css/table-styles.css', rel='stylesheet')
+
+block content
+  table
+    tr
+      th Username
+      th Email
+      th Subscribed Subreddits
+      th Total Score
+      th Administrator
+      th Edit
+      th Delete
+    each user in users
+      tr
+        td= user.username
+        td= user.email
+        td= user.subscribedSubs
+        td= user.totalScore
+        td= user.isAdmin
+        td 
+          a(href='/admin/edit_user/' + user._id) Edit
+        td 
+          a(href='/admin/delete_user/' + user._id) Delete
