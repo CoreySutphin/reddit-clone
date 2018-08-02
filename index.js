@@ -84,6 +84,10 @@ app.use('/r', subredditRoutes);
 let uauth = require(path.join(__dirname + '/public/routes/user_authentication'));
 app.use('/uauth', uauth);
 
+//Serve admin pages
+let admin = require(path.join(__dirname + '/public/routes/admin'));
+app.use('/admin', admin);
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 module.exports = app;

@@ -17,10 +17,13 @@ mixin bottom-navbar(pageTitle, ...tabs)
         span(class='user-karma' title='post karma') #{user.totalScore})
         span(class='separator') |
         a(class='logout hover' href='/uauth/logout') Logout
-          
+        if user.isAdmin
+          span(class='separator') |
+          a(href='/admin/dashboard') Administrator Dashboard
     else
         a(href='/uauth/register') Register
         span(class='separator') |
         a(href='/uauth/login') Login
+        
       
       

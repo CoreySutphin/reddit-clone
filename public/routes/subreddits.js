@@ -146,6 +146,7 @@ router.get('/home', (req, res) => {
     if (res.locals.user) {
       Post.find({ subreddit: { $in: res.locals.user.subscribedSubs } }, (err, postsData) => {
         if (err) throw err;
+
         postsData = shuffle(postsData);
         res.render('subreddit', {
           title: subredditData.title,
