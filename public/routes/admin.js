@@ -58,6 +58,9 @@ router.get('/users', (req,res) => {
   });
 });
 
+/*
+  Route to the edit user form
+ */
 router.get('/edit_user/:id', (req,res) => {
   let userID = req.params.id;
   User.findOne({ _id: userID }, (err, userFromDB) => {
@@ -106,11 +109,29 @@ router.post('/edit_user/:id', [
     // If there are no errors with the input
     let username = req.body.username;
     let email = req.body.email;
-    let newSubs = req.body.newSubscribedSubs;
-    let strtoarr = newSubs.split(',');
+    let newSubs = req.body.newSubscribedSubs.split(' '); //Set to array
     let score = req.body.score;
-    let admin = req.body.admin;
-    console.log(strtoarr + typeof(newSubs));
+    let admin = req.body.admin == 'on' ? true : false;
+
+    let query = {_id:userID}; //Query passed to DB to find user
+
+    //The updated data to be passed to DB
+    let update = {
+      username: username,
+      email: email,
+      subscribedSubs: newSubs,
+      totalScore: score,
+      isAdmin: admin
+    }
+
+    //Updates the user and redirects to user table if no error
+    User.findOneAndUpdate(query, update, {new:true}, (err, updatedUser) => {
+      if(err) {
+        console.log(err);
+      } else {
+        res.redirect('/admin/users');
+      }
+    });
   }
 });
 

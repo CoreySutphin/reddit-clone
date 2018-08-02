@@ -20,9 +20,9 @@ block content
       br
       input.formInput(name='email', type='email', value= userData.email)
     .form-group
-      label.formLabel New Subscribed Subreddits (Will overwrite old, each subreddit separated by ','):
+      label.formLabel New Subscribed Subreddits (Will overwrite old, each subreddit separated by a space):
       br
-      input.formInput(name='newSubscribedSubs', type='text', value= userData.subscribedSubs)
+      input.formInput(name='newSubscribedSubs', type='text', value= userData.subscribedSubs.toString())
     .form-group
       label.formLabel New Total Score:
       br
