@@ -135,4 +135,20 @@ router.post('/edit_user/:id', [
   }
 });
 
+/*
+  Route to catch user delete request
+  Logic for delete is in /js/main.js
+*/
+router.delete('/delete_user/:id', (req,res) => {
+  let query = {_id: req.params.id};
+
+  User.remove(query, err => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.send('Success');
+    }
+  })
+});
+
 module.exports = router;

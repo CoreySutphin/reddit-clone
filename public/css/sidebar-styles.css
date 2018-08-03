@@ -71,15 +71,41 @@ a {
   margin-top: 10px;
   font-size: 150%;
   margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .subredditName {
   font-size: 18px;
   font-weight: bold;
   color: black;
-  margin-bottom: 50px;
+  margin-bottom: 5px;
 }
 
 .subredditName:hover {
   text-decoration: underline;
+}
+
+/* The subscribe button in the sidebar*/
+.subscribe {
+  font-size: 12px;
+  background-color: #27ad1d;
+  text-align: center;
+  color:white;
+  width: 35%;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+
+/* The unsubscribe button */
+.unsubscribe {
+  font-size: 12px;
+  background-color: #d30e22;
+  text-align: center;
+  color:white;
+  width: 35%;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  border: 1px solid black;
 }
