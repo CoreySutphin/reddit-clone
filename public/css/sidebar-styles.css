@@ -83,3 +83,11 @@ a {
 .subredditName:hover {
   text-decoration: underline;
 }
+
+.subscribe {
+  background-color: #2cb220;
+  text-align: center;
+  color:white;
+  margin: 5px;
+  width: auto;
+}

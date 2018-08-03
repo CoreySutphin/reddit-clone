@@ -25,4 +25,4 @@ block content
         td 
           a(href='/admin/edit_user/' + user._id) Edit
         td 
-          a(href='/admin/delete_user/' + user._id) Delete
+          a.delete-user(href='#', data-id= user._id) Delete

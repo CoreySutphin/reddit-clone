@@ -68,6 +68,66 @@ router.post('/create', [
   }
 });
 
+/*
+  Route for catching subscribe to a subreddit
+*/
+router.get('/:subreddit/subscribe/:id', (req, res) => {
+  let userId = req.params.id;
+  let subredditName = req.params.subreddit;
+
+  //Gets the user from the DB
+  User.findOne({_id:userId}, (err, userData) => {
+    //Server side check to make sure the user isnt already subscribed to the subreddit
+    //If the user is already subscribed simply redirects them to the subreddit page
+    if(!userData.subscribedSubs.includes(subredditName)) {
+      //Adds the subreddit to the subscribedSubs array
+      userData.subscribedSubs.push(subredditName);
+
+      //Saves the updated user to the DB
+      userData.save((err, updatedUser) => {
+        if(err) {
+          console.log(err);
+        } else {
+          res.redirect('/r/' + subredditName);
+        }
+      });
+    } else {
+      res.redirect('/r/' + subredditName);
+    }
+  });
+});
+
+/*
+  Route for catching unsubscribe to a subreddit
+*/
+router.get('/:subreddit/unsubscribe/:id', (req, res) => {
+  let userId = req.params.id;
+  let subredditName = req.params.subreddit;
+
+  //Gets the user from the DB
+  User.findOne({_id:userId}, (err, userData) => {
+    //The index of the subreddit in the user's subscribed subs, or -1 if not subscribed
+    let subIndex = userData.subscribedSubs.indexOf(subredditName);
+    //Server side check to make sure the user is already subscribed to the subreddit
+    //If the user isn't already subscribed simply redirects them to the subreddit page
+    if(subIndex !== -1) {
+      //Removes the subreddit from the array
+      userData.subscribedSubs.splice(subIndex, 1);
+
+      //Saves the updated user to the DB
+      userData.save((err, updatedUser) => {
+        if(err) {
+          console.log(err);
+        } else {
+          res.redirect('/r/' + subredditName);
+        }
+      });
+    } else {
+      res.redirect('/r/' + subredditName);
+    }
+  });
+});
+
 router.get('/:subreddit/submit_text_post', (req,res) => {
   let subredditName = req.params.subreddit.toLowerCase();
   //First checks to see if the subreddit exists
