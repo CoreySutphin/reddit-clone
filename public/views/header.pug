@@ -9,9 +9,16 @@ html(lang="en")
     script(src='js/event-tracker.js')
     block css
       link(href='css/header-styles.css', rel='stylesheet')
+        
   body(onload='load()')
+    
     block header
       div.header
         +top-navbar(topBarSubreddits)
         +bottom-navbar(title || subreddit.title, "Best", "Hot", "New", "Rising", "Top")
     block content
+  footer
+    p Copyright &copy; Joseph Woodside and Corey Sutphin
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+  script(src='/js/main.js')
+  

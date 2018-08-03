@@ -1,0 +1,37 @@
+extends header
+
+block css 
+  link(href='/css/header-styles.css', rel='stylesheet')
+  link(href='/css/subreddit-styles.css', rel='stylesheet')
+  link(href='/css/form-styles.css', rel='stylesheet')
+
+block content
+  if errors
+    ul
+    each error in errors
+      li= error.msg
+  form(method='post', action='/admin/edit_user/' + userData._id)
+    .form-group
+      label.formLabel New Username:
+      br
+      input.formInput(name='username', type='text', value= userData.username)
+    .form-group
+      label.formLabel New Email:
+      br
+      input.formInput(name='email', type='email', value= userData.email)
+    .form-group
+      label.formLabel New Subscribed Subreddits (Will overwrite old, each subreddit separated by a space):
+      br
+      input.formInput(name='newSubscribedSubs', type='text', value= userData.subscribedSubs.toString())
+    .form-group
+      label.formLabel New Total Score:
+      br
+      input.formInput(name='score', type='number', value= userData.totalScore)
+    .form-group
+      if userData.isAdmin
+        input(name='admin', type='checkbox', checked)
+      else
+        input(name='admin', type='checkbox')
+      label.formLabel(for='admin') Administrator
+    br
+    input(type='submit', value='Submit')

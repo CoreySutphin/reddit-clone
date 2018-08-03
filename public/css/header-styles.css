@@ -1,3 +1,9 @@
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
 /* Top level div for both navbars */
 .header {
   border-bottom: 1px solid #5f99cf;

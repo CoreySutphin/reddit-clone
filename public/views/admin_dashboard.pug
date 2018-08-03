@@ -1,0 +1,14 @@
+extends header
+
+block css 
+  link(href='/css/header-styles.css', rel='stylesheet')
+  link(href='/css/subreddit-styles.css', rel='stylesheet')
+
+block content
+  ul
+    li
+      a(href='/admin/users') Users
+    li
+      a(href='/admin/subreddits') Subreddits
+    li
+      a(href='/admin/posts') Posts
