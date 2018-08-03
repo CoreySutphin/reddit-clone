@@ -6,9 +6,10 @@ html(lang="en")
 
   head
     title reddit-clone
+    script(src='js/event-tracker.js')
     block css
       link(href='css/header-styles.css', rel='stylesheet')
-  body
+  body(onload='load()')
     block header
       div.header
         +top-navbar(topBarSubreddits)

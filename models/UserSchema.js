@@ -6,6 +6,8 @@ var mongoose = require('mongoose'),
 const UserSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  upvotedPosts: [{ type: String, default: [] }],
+  downvotedPosts: [{ type: String, default: [] }],
   email: { type: String, required: true, unique: true },
   subscribedSubs: [{ type: String, default: [] }],
   totalScore: { type: Number, default: 0 },

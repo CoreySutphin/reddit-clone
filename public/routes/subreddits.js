@@ -4,6 +4,10 @@ const passport = require('passport');
 const path = require('path');
 const { check, validationResult} = require('express-validator/check');
 
+// Creating a queue for upvote/downvote requests
+const dq = require('deferred-queue');
+var queue = dq ();
+
 //Models
 let Subreddit = require(path.join(appRoot + '/models/SubredditSchema'));
 let Post = require(path.join(appRoot + '/models/PostSchema'));
@@ -248,6 +252,31 @@ router.get('/:subreddit/:condition', (req, res) => {
   });
 });
 
+router.post('/vote/post', (req, res) => {
+  if (req.body.direction === '1') {
+    console.log("UPVOTE: " + req.body.user + " " + req.body.id);
+    queue.push (function (cb){
+      process.nextTick (function (){
+        postUpvote(req.body.id, req.body.user);
+        cb ();
+      });
+    }, function (){
+
+    });
+  }
+  else if (req.body.direction == '-1') {
+    console.log("DOWNVOTE: " + req.body.user + " " + req.body.id);
+    queue.push (function (cb){
+      process.nextTick (function (){
+        postDownvote(req.body.id, req.body.user);
+        cb ();
+      });
+    }, function (){
+
+    });
+  }
+});
+
 // Used to shuffle posts pulled for the home page, attempts to shuffle so there's not a sequence of posts
 // from the same subreddit
 function shuffle(array) {
@@ -279,6 +308,49 @@ function sortPosts(posts, condition) {
   }
 
   return posts;
+}
+
+function postUpvote(id, user) {
+  User.findOne({ username: user }, (err, userData) => {
+    if (err) throw err;
+    if (userData.upvotedPosts.includes(id)) {
+      return null;
+    }
+
+    // Update user with new upvote and removes id from downvotes array if it exists
+    userData.upvotedPosts.push(id);
+    if (userData.downvotedPosts.includes(id)) {
+      userData.downvotedPosts.splice(userData.downvotedPosts.indexOf(id), 1);
+    }
+    userData.save();
+
+    // Update post
+    Post.findOneAndUpdate({ _id: id }, { $inc: { upvotes: 1 } }, (err, postData) => {
+      console.log(postData);
+      if (err) throw err;
+    });
+  });
+}
+
+function postDownvote(id, user) {
+  User.findOne({ username: user }, (err, userData) => {
+    if (err) throw err;
+    if (userData.downvotedPosts.includes(id)) {
+      return null;
+    }
+
+    // Update user with new downvote and removes id from upvotes array if it exists
+    userData.downvotedPosts.push(id);
+    if (userData.upvotedPosts.includes(id)) {
+      userData.upvotedPosts.splice(userData.upvotedPosts.indexOf(id), 1);
+    }
+    userData.save();
+
+    // Update post
+    Post.findOneAndUpdate({ _id: id }, { $inc: { downvotes: 1 } }, (err, postData) => {
+      if (err) throw err;
+    })
+  });
 }
 
 module.exports = router;
