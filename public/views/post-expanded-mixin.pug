@@ -1,0 +1,17 @@
+//- Declaration (post-mixin.pug)
+mixin post-expanded(post)
+  .post
+    .post-votes-info
+      .arrow-up
+      span(class='score')!=(post.upvotes - post.downvotes)
+      .arrow-down
+  
+    .entry
+      a(class='title', href='/post/' + post._id)=post.title
+      .tag-line 
+        p(class='tag-text')='Submitted ' + timeSince(post.timestamp) + ' by '
+        a(class='tag-author' href!='/user/' + post.user)=post.user
+        p(class='tag-text')=' to '
+        a(class='tag-subreddit' href!='/r/' + post.subreddit)='r/' + post.subreddit
+      .contentContainer
+        p(class='content')= post.content
