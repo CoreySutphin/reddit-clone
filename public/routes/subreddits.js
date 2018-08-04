@@ -387,7 +387,6 @@ function postUpvote(id, user) {
 
     // Update post
     Post.findOneAndUpdate({ _id: id }, { $inc: { upvotes: 1 } }, (err, postData) => {
-      console.log(postData);
       if (err) throw err;
     });
   });

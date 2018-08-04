@@ -6,11 +6,10 @@ html(lang="en")
 
   head
     title reddit-clone
-    script(src='js/event-tracker.js')
     block css
       link(href='css/header-styles.css', rel='stylesheet')
         
-  body(onload='load()')
+  body()
     
     block header
       div.header
@@ -21,4 +20,5 @@ html(lang="en")
     p Copyright &copy; Joseph Woodside and Corey Sutphin
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
   script(src='/js/main.js')
+  script(src='/js/event-tracker.js')
   

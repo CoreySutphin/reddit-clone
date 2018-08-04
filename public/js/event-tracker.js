@@ -55,7 +55,7 @@ function Track(elem) {
 }
 
 // Called when body is rendered
-load = function() {
+$(document).ready(function() {
   let upvotes = document.getElementsByClassName('arrow-up');
   Array.prototype.forEach.call(upvotes, function(upvote) {
     new Track(upvote);
@@ -65,4 +65,5 @@ load = function() {
   Array.prototype.forEach.call(downvotes, function(downvote) {
     new Track(downvote);
   });
-}
+
+});
