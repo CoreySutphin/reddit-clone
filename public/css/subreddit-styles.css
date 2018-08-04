@@ -11,6 +11,15 @@ body {
   min-height: 100%;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 .post-table {
   list-style-type: none;
 }
@@ -119,4 +128,61 @@ body {
   text-decoration: none;
   margin-bottom: 10px;
   display: inline-block;
+}
+
+/* The div containing the content of the post*/
+.contentContainer {
+  border-radius: 5px;
+  border: 1px solid #369;
+  width: 40vw;
+  height: auto;
+  min-height: 5vh;
+}
+
+/* The actual content p tag*/
+.content {
+  font-size: 1.5em;
+  margin: 5px;
+  word-wrap: normal;
+}
+
+/*container for the comments h3, line break, and comment sorting links */
+.commentInfo {
+  font-size: 1.5em;
+  margin-left: 20px;
+}
+
+.commentInfo hr {
+  border-top: dotted 2px gray;
+  width: 84vw;
+}
+
+/*For the dropdown links */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.sortLink {
+  padding: 3px;
+  font-weight: bold;
+}
+
+.dropdown-arrow {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid gray;
+  display: inline-block;
+  margin-left: 2px;
 }

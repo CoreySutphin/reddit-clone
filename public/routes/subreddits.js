@@ -134,6 +134,11 @@ router.get('/:subreddit/unsubscribe/:id', (req, res) => {
 
 router.get('/:subreddit/submit_text_post', (req,res) => {
   let subredditName = req.params.subreddit.toLowerCase();
+
+  //Home is an exception, no posts allowed directly
+  if(subredditName === 'home') {
+    res.redirect('/');
+  }
   //First checks to see if the subreddit exists
   Subreddit.findOne({ name: subredditName }, (err, subredditData) => {
     if (err) console.log(err);
