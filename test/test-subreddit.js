@@ -75,7 +75,7 @@ describe('Sorting Posts', function() {
           postsData.sort(function compare(a, b) {
             a.score = a.upvotes - a.downvotes;
             b.score = b.upvotes - b.downvotes;
-            return b - a;
+            return b.score - a.score;
           });
           JSON.stringify(postsData).should.eql(JSON.stringify(res.body.data));
           done();

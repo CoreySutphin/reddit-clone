@@ -292,7 +292,7 @@ router.get('/:subreddit/:condition', (req, res) => {
   let subredditName = req.params.subreddit.toLowerCase();
   let condition = req.params.condition;
   // Checks if something besides a valid condition was passed in
-  if (!['Top', 'New', 'Best', 'Hot'].includes(condition)) {
+  if (['Top', 'New', 'Best', 'Hot'].indexOf(condition) < 0) {
     res.redirect('/r/' + subredditName);
     return;
   }
@@ -333,7 +333,7 @@ function sortPosts(posts, condition) {
       posts.sort(function compare(a, b) {
         a.score = a.upvotes - a.downvotes;
         b.score = b.upvotes - b.downvotes;
-        return b - a;
+        return b.score - a.score;
       });
       break;
 
