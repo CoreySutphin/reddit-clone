@@ -8,8 +8,9 @@ html(lang="en")
     title reddit-clone
     block css
       link(href='css/header-styles.css', rel='stylesheet')
-      
-  body
+        
+  body()
+    
     block header
       div.header
         +top-navbar(topBarSubreddits)
@@ -19,4 +20,5 @@ html(lang="en")
     p Copyright &copy; Joseph Woodside and Corey Sutphin
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
   script(src='/js/main.js')
+  script(src='/js/event-tracker.js')
   
