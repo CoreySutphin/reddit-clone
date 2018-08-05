@@ -1,15 +1,15 @@
 //- Declaration (post-mixin.pug)
 mixin post(post, rank)
-  .post
+  .post(id=post._id)
     span(class='rank')=rank
     .post-votes-info
       if (user && user.upvotedPosts.indexOf(post._id) > -1)
-        .arrow-up(data-action='upvote', data-id=post._id, data-user=user.username, style='background-color: orange')
+        div(class='arrow-up-voted', data-action='upvote', data-id=post._id, data-user=user.username)
       else
         .arrow-up(data-action='upvote', data-id=post._id, data-user!=user ? user.username : null)
       span(class='score')!=(post.upvotes - post.downvotes)
       if (user && user.downvotedPosts.indexOf(post._id) > -1)
-        .arrow-down(data-action='downvote', data-id=post._id, data-user=user.username, style='background-color: blue')
+        div(class='arrow-down-voted', data-action='downvote', data-id=post._id, data-user=user.username)
       else
         .arrow-down(data-action='downvote', data-id=post._id, data-user!=user ? user.username : null)
   

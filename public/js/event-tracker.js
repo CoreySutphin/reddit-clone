@@ -9,16 +9,30 @@ function Track(elem) {
   this.trackUpvote = function(target) {
     var id = target.getAttribute('data-id');
     var user = target.getAttribute('data-user');
-    console.log(id, user);
-    target.style.backgroundColor = 'orange';
-    let downvotes = document.getElementsByClassName('arrow-down');
+
+    $(target).removeClass('arrow-up');
+    $(target).addClass('arrow-up-voted');
+    // Sets the corresponding downvote arrow to unclicked
+    let downvotes = document.getElementsByClassName('arrow-down-voted');
     Array.prototype.forEach.call(downvotes, function(downvote) {
       if (downvote.attributes['data-id'].value === id) {
-        downvote.style.backgroundColor = '';
+        $(downvote).removeClass('arrow-down-voted');
+        $(downvote).addClass('arrow-down')
+        new Track(downvote);
       }
     });
 
-    xhttp.open('POST', '/r/vote/post', true);
+    /*
+     Increments the score for the post with the same post id
+    */
+    let scores = document.getElementsByClassName('score');
+    Array.prototype.forEach.call(scores, function(score) {
+      if (score.previousSibling.getAttribute('data-id') === id) {
+        score.innerHTML = parseInt(score.innerHTML) + 1
+      }
+    });
+
+    xhttp.open('POST', '/post/vote', true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send('id=' + id + '&user=' + user + '&direction=' + 1);
   }
@@ -26,16 +40,30 @@ function Track(elem) {
   this.trackDownvote =  function(target) {
     var id = target.getAttribute('data-id');
     var user = target.getAttribute('data-user');
-    console.log(id, user)
-    target.style.backgroundColor = 'blue';
-    let upvotes = document.getElementsByClassName('arrow-up');
+
+    $(target).removeClass('arrow-down');
+    $(target).addClass('arrow-down-voted');
+    // Sets the corresponding upvote arrow to unclicked
+    let upvotes = document.getElementsByClassName('arrow-up-voted');
     Array.prototype.forEach.call(upvotes, function(upvote) {
       if (upvote.attributes['data-id'].value === id) {
-        upvote.style.backgroundColor = '';
+        $(upvote).removeClass('arrow-up-voted');
+        $(upvote).addClass('arrow-up')
+        new Track(upvote);
       }
     });
 
-    xhttp.open('POST', '/r/vote/post', true)
+    /*
+      Decrements the score for the post with the same post id
+    */
+    let scores = document.getElementsByClassName('score');
+    Array.prototype.forEach.call(scores, function(score) {
+      if (score.nextSibling.getAttribute('data-id') === id) {
+        score.innerHTML = parseInt(score.innerHTML) - 1
+      }
+    });
+
+    xhttp.open('POST', '/post/vote', true)
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send('id=' + id + '&user=' + user + '&direction=' + '-1');
   }
@@ -45,6 +73,9 @@ function Track(elem) {
   elem.onclick = function(e) {
     var target = e && e.target || event.srcElement;
     var action = target.getAttribute('data-action');
+    if ($(target).hasClass('arrow-up-voted') || $(target).hasClass('arrow-down-voted')) {
+      return;
+    }
     if (action === 'upvote') {
       self.trackUpvote(target);
     }

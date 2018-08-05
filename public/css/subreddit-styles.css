@@ -56,7 +56,7 @@ a:hover {
   align-items: center;
 }
 
-/*Upvote arrow */
+/* Upvote arrow */
 .arrow-up {
   width: 0;
   height: 0;
@@ -68,7 +68,21 @@ a:hover {
   cursor: pointer;
 }
 
-/*Downvote arrow */
+/* Upvote arrow voted */
+.arrow-up-voted {
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 9px solid gray;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  background-color: orange;
+}
+
+
+/* Downvote arrow */
 .arrow-down {
   width: 0;
   height: 0;
@@ -78,6 +92,19 @@ a:hover {
   margin-top: 3px;
   margin-bottom: 2px;
   cursor: pointer;
+}
+
+/* Downvote arrow voted */
+.arrow-down-voted {
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 9px solid gray;
+  margin-top: 3px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  background-color: blue;
 }
 
 .score {
