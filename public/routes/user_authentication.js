@@ -49,7 +49,7 @@ router.post('/register', [
       username: username,
       password: password,
       email: email,
-      subscribedSubs: ['funny', 'news', 'gaming', 'rva'] //These are our default subreddits 
+      subscribedSubs: ['funny', 'news', 'gaming', 'rva'] //These are our default subreddits
     });
     // When the user is saved to the database
     // Password is hashed from the UserSchema file
@@ -95,10 +95,11 @@ router.post('/login', (req,res,next) => {
                                    failureRedirect: '/uauth/login' })(req,res,next);
 });
 
+
 //Logout route
 router.get('/logout', (req,res) => {
   req.logout();
-  res.redirect('/uauth/login');
+  res.redirect('/');
 });
 
 module.exports = router;
