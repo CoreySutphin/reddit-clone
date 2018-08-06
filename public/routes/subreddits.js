@@ -11,7 +11,6 @@ let User = require(path.join(appRoot + '/models/UserSchema'));
 
 router.use(express.static(appRoot + '/public')) // Include static files
 
-
 router.get('*', (req,res,next) => {
   res.locals.user = req.user || null;
   let defaultSubreddits = ['Funny', 'News','Gaming'];

@@ -51,11 +51,15 @@ router.get('/:id', (req,res) => {
 });
 
 router.post('/vote', (req, res) => {
+  if (!res.locals.user) {
+    return;
+  }
+
   if (req.body.direction === '1') {
     console.log("UPVOTE: " + req.body.user + " " + req.body.id);
     queue.push (function (cb){
       process.nextTick (function (){
-        postUpvote(req.body.id, req.body.user);
+        postUpvote(req.body.id, res.locals.user.username);
         cb ();
       });
     }, function (){
@@ -66,7 +70,7 @@ router.post('/vote', (req, res) => {
     console.log("DOWNVOTE: " + req.body.user + " " + req.body.id);
     queue.push (function (cb){
       process.nextTick (function (){
-        postDownvote(req.body.id, req.body.user);
+        postDownvote(req.body.id, res.locals.user.username);
         cb ();
       });
     }, function (){
@@ -85,13 +89,20 @@ function postUpvote(id, user) {
     // Update user with new upvote and removes id from downvotes array if it exists
     userData.upvotedPosts.push(id);
     if (userData.downvotedPosts.includes(id)) {
+      // Remove downvote then add upvote
+      Post.findOneAndUpdate({ _id: id }, { $inc: { upvotes: 1, downvotes: -1 } }, (err, postData) => {
+        if (err) throw err;
+      });
       userData.downvotedPosts.splice(userData.downvotedPosts.indexOf(id), 1);
     }
-    userData.save(function(err) {
-      // Update post
+    else {
+      // Add upvote to post
       Post.findOneAndUpdate({ _id: id }, { $inc: { upvotes: 1 } }, (err, postData) => {
         if (err) throw err;
       });
+    }
+    userData.save(function(err) {
+      if (err) throw err;
     });
 
   });
@@ -107,13 +118,20 @@ function postDownvote(id, user) {
     // Update user with new downvote and removes id from upvotes array if it exists
     userData.downvotedPosts.push(id);
     if (userData.upvotedPosts.includes(id)) {
+      // Remove upvote then add downvote
+      Post.findOneAndUpdate({ _id: id }, { $inc: { downvotes: 1, upvotes: -1 } }, (err, postData) => {
+        if (err) throw err;
+      });
       userData.upvotedPosts.splice(userData.upvotedPosts.indexOf(id), 1);
     }
-    userData.save(function(err) {
+    else {
       // Update post
       Post.findOneAndUpdate({ _id: id }, { $inc: { downvotes: 1 } }, (err, postData) => {
         if (err) throw err;
       });
+    }
+    userData.save(function(err) {
+      if (err) throw err;
     });
   });
 }

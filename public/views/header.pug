@@ -9,8 +9,7 @@ html(lang="en")
     block css
       link(href='css/header-styles.css', rel='stylesheet')
         
-  body()
-    
+  body
     block header
       div.header
         +top-navbar(topBarSubreddits)
@@ -18,6 +17,11 @@ html(lang="en")
     block content
   footer
     p Copyright &copy; Joseph Woodside and Corey Sutphin
+    
+  script.
+    var user = !{ JSON.stringify(user) }
+    if (user)
+      window.user = user.username
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
   script(src='/js/main.js')
   script(src='/js/event-tracker.js')
