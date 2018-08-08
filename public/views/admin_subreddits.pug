@@ -1,0 +1,27 @@
+extends header
+
+block css 
+  link(href='/css/header-styles.css', rel='stylesheet')
+  link(href='/css/subreddit-styles.css', rel='stylesheet')
+  link(href='/css/table-styles.css', rel='stylesheet')
+block content
+  table
+    tr
+      th Name
+      th Title
+      th Description
+      th Sidebar
+      th Number of Subscribers
+      th Edit
+      th Delete
+    each subreddit in subreddits
+      tr
+        td= subreddit.name
+        td= subreddit.title
+        td= subreddit.description
+        td= subreddit.sidebar
+        td= subreddit.numSubbed
+        td 
+          a(href='/admin/edit_sub/' + subreddit._id) Edit
+        td 
+          a.delete-subreddit(href='#', data-id= subreddit._id) Delete

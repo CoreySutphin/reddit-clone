@@ -1,0 +1,28 @@
+extends header
+
+block css 
+  link(href='/css/header-styles.css', rel='stylesheet')
+  link(href='/css/subreddit-styles.css', rel='stylesheet')
+  link(href='/css/form-styles.css', rel='stylesheet')
+
+block content
+  if errors
+    ul
+    each error in errors
+      li= error.msg
+  h1= subData.name
+  form(method='post', action='/admin/edit_sub/' + subData._id)
+    .form-group
+      label.formLabel New Title:
+      br
+      input.formInput(name='title', type='text', value= subData.title)
+    .form-group
+      label.formLabel New Description:
+      br
+      textarea.formInput(name='description', rows='4', cols='60')= subData.description
+    .form-group
+      label.formLabel New Sidebar:
+      br
+      textarea.formInput(name='sidebar', rows='4', cols='60')= subData.sidebar
+    br
+    input(type='submit', value='Submit')

@@ -14,7 +14,10 @@ mixin sidebar(subreddit)
       .submit_text_post
         a(href='/r/' + subreddit.name + '/submit_text_post') Submit a new text post
     .sidebarInfo
-      a.subredditName(href='/r/' + subreddit.name)= '/r/' + subreddit.name
+      .nameAndNumSubbed
+        a.subredditName(href='/r/' + subreddit.name)= '/r/' + subreddit.name
+        if subreddit.name !== 'home'
+          p.numSubbed= 'subscribed: ' + subreddit.numSubbed
       if subreddit.name !== 'home' && user
         if !user.subscribedSubs.includes(subreddit.name)
           a.subscribe(href='/r/' + subreddit.name + '/subscribe/' + user._id) subscribe

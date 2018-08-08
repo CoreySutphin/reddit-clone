@@ -5,10 +5,10 @@ block css
   link(href='/css/subreddit-styles.css', rel='stylesheet')
 
 block content
-  ul
+  ul.adminList
     li
-      a(href='/admin/users') Users
+      a.adminLink(href='/admin/users') Users
     li
-      a(href='/admin/subreddits') Subreddits
+      a.adminLink(href='/admin/subreddits') Subreddits
     li
-      a(href='/admin/posts') Posts
+      a.adminLink(href='/admin/posts') Posts
