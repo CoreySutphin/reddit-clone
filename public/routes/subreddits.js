@@ -87,6 +87,20 @@ router.get('/:subreddit/subscribe/:id', (req, res) => {
         if(err) {
           console.log(err);
         } else {
+          //Updates the subreddit.numSubbed + 1
+          Subreddit.findOne({name:subredditName}, (err, subToBeUpdated) => {
+            if (err) {
+              console.log(err);
+            } else {
+              subToBeUpdated.numSubbed++;
+
+              subToBeUpdated.save((err, updatedSub) => {
+                if(err) {
+                  console.log(err);
+                }
+              });
+            }
+          });
           res.redirect('/r/' + subredditName);
         }
       });
@@ -118,6 +132,20 @@ router.get('/:subreddit/unsubscribe/:id', (req, res) => {
         if(err) {
           console.log(err);
         } else {
+          //Updates the subreddit.numSubbed - 1
+          Subreddit.findOne({name:subredditName}, (err, subToBeUpdated) => {
+            if(err) {
+              console.log(err);
+            } else {
+              subToBeUpdated.numSubbed--;
+            }
+
+            subToBeUpdated.save((err, updatedSub) => {
+              if(err) {
+                console.log(err);
+              }
+            });
+          });
           res.redirect('/r/' + subredditName);
         }
       });

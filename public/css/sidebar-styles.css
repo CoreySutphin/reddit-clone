@@ -82,6 +82,17 @@ a {
   margin-bottom: 5px;
 }
 
+.nameAndNumSubbed {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.numSubbed {
+  font-size: .9em;
+}
+
 .subredditName:hover {
   text-decoration: underline;
 }

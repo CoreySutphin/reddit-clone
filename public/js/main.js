@@ -19,4 +19,25 @@ $(document).ready(function() {
       console.log('Failure');
     }
   });
+
+  $('.delete-subreddit').on('click', function(e) {
+    $target = $(e.target);
+    const id = $target.attr('data-id');
+    var result = confirm('Are you sure you want to delete this subreddit?');
+    if(result) {
+      $.ajax({
+        type: 'DELETE',
+        url: '/admin/delete_sub/' + id,
+        success: function(res) {
+          alert('Deleted subreddit');
+          window.location.href='/admin/subreddits';
+        },
+        error: function(err){
+          console.log(err);
+        }
+      });
+    } else {
+      console.log('Failure');
+    }
+  });
 });
