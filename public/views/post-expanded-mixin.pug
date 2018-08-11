@@ -2,9 +2,15 @@
 mixin post-expanded(post)
   .post
     .post-votes-info
-      .arrow-up
+      if (user && user.upvotedPosts.indexOf(post._id) > -1)
+        div(class='arrow-up-voted login-required', data-action='upvote', data-id=post._id)
+      else
+        div(class='arrow-up login-required', data-action='upvote', data-id=post._id)
       span(class='score')!=(post.upvotes - post.downvotes)
-      .arrow-down
+      if (user && user.downvotedPosts.indexOf(post._id) > -1)
+        div(class='arrow-down-voted login-required', data-action='downvote', data-id=post._id)
+      else
+        div(class='arrow-down login-required', data-action='downvote', data-id=post._id)
   
     .entry
       a(class='title', href='/post/' + post._id)=post.title
