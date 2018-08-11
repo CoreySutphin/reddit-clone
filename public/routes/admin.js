@@ -263,7 +263,7 @@ router.delete('/delete_sub/:id', (req, res) => {
               }
             });
           });
-          
+
           //Delete subreddit after unsubbing all the users
           Subreddits.remove(query, err => {
             if(err) {
@@ -274,6 +274,90 @@ router.delete('/delete_sub/:id', (req, res) => {
           });
         }
       });
+    }
+  });
+});
+
+//Route for showing posts
+router.get('/posts', (req, res) => {
+  Post.find({}, (err, allPosts) => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.render('admin_posts', {
+        title: 'Posts',
+        posts: allPosts
+      });
+    }
+  });
+});
+
+//Route for editing individual post
+router.get('/edit_post/:id', (req, res) => {
+  Post.findOne({_id: req.params.id}, (err, postFromDB) => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.render('admin_edit_post', {
+        title: 'Edit Post',
+        postData: postFromDB
+      });
+    }
+  });
+});
+
+router.post('/edit_post/:id',[
+  check('title').not().isEmpty().withMessage('Title is required'),
+  check('content').not().isEmpty().withMessage('Content is required'),
+  check('upvotes').not().isEmpty().withMessage('Upvotes are required'),
+  check('downvotes').not().isEmpty().withMessage('Downvotes are required'),
+], (req, res) => {
+  let postID = req.params.id;
+
+  //Check for any errors in the validation
+  const errors = validationResult(req).array();
+
+  //If there are errors, form gets rendered again with errors
+  if(errors.length !== 0) {
+    Post.findOne({_id: postID}, (err, postFromDB) => {
+      if(err) {
+        console.log(err);
+      } else {
+        res.render('admin_edit_post', {
+          title: 'Edit Post',
+          postData: postFromDB,
+          errors: errors
+        });
+      }
+    });
+    //If there are no errors with input validation
+  } else {
+    //All of the fields to be updated
+    let update = {
+      title: req.body.title,
+      content: req.body.content,
+      upvotes: +req.body.upvotes,
+      downvotes: +req.body.downvotes
+    }
+
+    Post.findOneAndUpdate({_id: postID}, update, {new: true}, (err, updatedPost) => {
+      if(err) {
+        console.log(err);
+      } else {
+        res.redirect('/admin/posts');
+      }
+    });
+  }
+});
+
+router.delete('/delete_post/:id', (req, res) => {
+  let postID = req.params.id;
+
+  Post.remove({_id: postID}, err => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.send('Success');
     }
   });
 });

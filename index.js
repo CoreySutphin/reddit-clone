@@ -56,6 +56,9 @@ app.get('*', (req,res,next) => {
 
   //Adds the timeSince function to the locals to use in the templates
   res.locals.timeSince = utility.timeSince;
+
+  //Adds a function to format dates as MM/DD/YYYY
+  res.locals.dateFormat = utility.dateFormat;
   next();
 });
 

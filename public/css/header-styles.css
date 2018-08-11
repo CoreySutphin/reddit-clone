@@ -35,6 +35,7 @@ a:hover {
   left: 0px;
   right: 0px;
   padding-left: 5px;
+  min-height: 18px;
 }
 
 .topnav-list {

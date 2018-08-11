@@ -208,7 +208,7 @@ router.post('/:subreddit/submit_text_post',[
     });
   } else {
     let title = req.body.title;
-    let content = req.body.content;
+    let content = req.body.content || " ";
 
     let newPost = new Post({
       title: title,
