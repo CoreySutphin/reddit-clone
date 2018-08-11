@@ -56,7 +56,7 @@ router.post('/vote', (req, res) => {
   }
 
   if (req.body.direction === '1') {
-    console.log("UPVOTE: " + req.body.user + " " + req.body.id);
+    console.log("UPVOTE: " + req.body.id);
     queue.push (function (cb){
       process.nextTick (function (){
         postUpvote(req.body.id, res.locals.user.username);
@@ -67,7 +67,7 @@ router.post('/vote', (req, res) => {
     });
   }
   else if (req.body.direction == '-1') {
-    console.log("DOWNVOTE: " + req.body.user + " " + req.body.id);
+    console.log("DOWNVOTE: " + req.body.id);
     queue.push (function (cb){
       process.nextTick (function (){
         postDownvote(req.body.id, res.locals.user.username);
