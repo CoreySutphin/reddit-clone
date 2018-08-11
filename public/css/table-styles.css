@@ -9,6 +9,7 @@ td, th {
     text-align: left;
     padding: 8px;
     font-size: 12px;
+    max-width: 40vw;
 }
 
 tr:nth-child(even) {

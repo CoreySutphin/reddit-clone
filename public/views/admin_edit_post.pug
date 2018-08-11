@@ -1,0 +1,31 @@
+extends header
+
+block css 
+  link(href='/css/header-styles.css', rel='stylesheet')
+  link(href='/css/subreddit-styles.css', rel='stylesheet')
+  link(href='/css/form-styles.css', rel='stylesheet')
+
+block content
+  if errors
+    ul
+    each error in errors
+      li= error.msg
+  form(method='post', action='/admin/edit_post/' + postData._id)
+    .form-group
+      label.formLabel New Title:
+      br
+      input.formInput(name='title', type='text', value= postData.title)
+    .form-group
+      label.formLabel New Content:
+      br       
+      textarea.formInput(name='content', rows='4', cols='60')= postData.content
+    .form-group
+      label.formLabel Upvotes:
+      br
+      input.formInput(name='upvotes', type='number', value= postData.upvotes)
+    .form-group
+      label.formLabel Downvotes:
+      br
+      input.formInput(name='downvotes', type='number', value= postData.downvotes)
+    br
+    input(type='submit', value='Submit')

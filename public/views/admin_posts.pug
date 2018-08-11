@@ -1,0 +1,32 @@
+extends header
+
+block css 
+  link(href='/css/header-styles.css', rel='stylesheet')
+  link(href='/css/subreddit-styles.css', rel='stylesheet')
+  link(href='/css/table-styles.css', rel='stylesheet')
+    
+block content
+  table
+    tr
+      th Subreddit
+      th Title
+      th Content
+      th User
+      th Upvotes
+      th Downvotes
+      th Date Submitted
+      th Edit
+      th Delete
+    each post in posts
+      tr
+        td= post.subreddit
+        td= post.title
+        td= post.content
+        td= post.user
+        td= post.upvotes
+        td= post.downvotes
+        td= dateFormat(post.timestamp)
+        td 
+          a(href='/admin/edit_post/' + post._id) Edit
+        td 
+          a.delete-post(href='#', data-id= post._id) Delete
