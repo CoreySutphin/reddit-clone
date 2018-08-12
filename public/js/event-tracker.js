@@ -13,7 +13,7 @@ function Track(elem) {
     $(target).addClass('arrow-up-voted');
 
     // Sets the corresponding downvote arrow to unclicked
-    let downvotes = document.getElementsByClassName('arrow-down-voted');
+    let downvotes = $('.arrow-down, .arrow-down-voted');
     Array.prototype.forEach.call(downvotes, function(downvote) {
       if (downvote.attributes['data-id'].value === id) {
         if ($(downvote).hasClass('arrow-down-voted')) {
@@ -38,7 +38,7 @@ function Track(elem) {
     $(target).addClass('arrow-down-voted');
 
     // Sets the corresponding upvote arrow to unclicked
-    let upvotes = document.getElementsByClassName('arrow-up-voted');
+    let upvotes = $('.arrow-up, .arrow-up-voted');
     Array.prototype.forEach.call(upvotes, function(upvote) {
       if (upvote.attributes['data-id'].value === id) {
         if ($(upvote).hasClass('arrow-up-voted')) {

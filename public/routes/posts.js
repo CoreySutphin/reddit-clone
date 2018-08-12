@@ -88,23 +88,24 @@ function postUpvote(id, user) {
 
     // Update user with new upvote and removes id from downvotes array if it exists
     userData.upvotedPosts.push(id);
-    if (userData.downvotedPosts.includes(id)) {
-      // Remove downvote then add upvote
-      Post.findOneAndUpdate({ _id: id }, { $inc: { upvotes: 1, downvotes: -1 } }, (err, postData) => {
+    Post.findOne({ _id: id }, (err, postData) => {
+      if (userData.downvotedPosts.includes(id)) {
+        // Remove downvote then add upvote
+        postData.downvotes--;
+        postData.upvotes++;
+        userData.downvotedPosts.splice(userData.downvotedPosts.indexOf(id), 1);
+      }
+      else {
+        // Add upvote to post
+        postData.upvotes++;
+      }
+      postData.save(function(err) {
         if (err) throw err;
       });
-      userData.downvotedPosts.splice(userData.downvotedPosts.indexOf(id), 1);
-    }
-    else {
-      // Add upvote to post
-      Post.findOneAndUpdate({ _id: id }, { $inc: { upvotes: 1 } }, (err, postData) => {
+      userData.save(function(err) {
         if (err) throw err;
       });
-    }
-    userData.save(function(err) {
-      if (err) throw err;
     });
-
   });
 }
 
@@ -117,21 +118,23 @@ function postDownvote(id, user) {
 
     // Update user with new downvote and removes id from upvotes array if it exists
     userData.downvotedPosts.push(id);
-    if (userData.upvotedPosts.includes(id)) {
-      // Remove upvote then add downvote
-      Post.findOneAndUpdate({ _id: id }, { $inc: { downvotes: 1, upvotes: -1 } }, (err, postData) => {
+    Post.findOne({ _id: id }, (err, postData) => {
+      if (userData.upvotedPosts.includes(id)) {
+        // Remove upvote then add downvote
+        postData.upvotes--;
+        postData.downvotes++;
+        userData.upvotedPosts.splice(userData.upvotedPosts.indexOf(id), 1);
+      }
+      else {
+        postData.downvotes++;
+      }
+
+      postData.save(function(err) {
         if (err) throw err;
       });
-      userData.upvotedPosts.splice(userData.upvotedPosts.indexOf(id), 1);
-    }
-    else {
-      // Update post
-      Post.findOneAndUpdate({ _id: id }, { $inc: { downvotes: 1 } }, (err, postData) => {
+      userData.save(function(err) {
         if (err) throw err;
       });
-    }
-    userData.save(function(err) {
-      if (err) throw err;
     });
   });
 }
