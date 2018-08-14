@@ -13,7 +13,13 @@ html(lang="en")
     block header
       div.header
         +top-navbar(topBarSubreddits)
-        +bottom-navbar(title || subreddit.title, "Best", "Hot", "New", "Rising", "Top")
+        if subreddit
+          +bottom-navbar(title || subreddit.title, "Best", "Hot", "New", "Rising", "Top")
+        else if userScore
+          +bottom-navbar(title, "Posts", "Comments", "Upvotes", "Downvotes")
+        else 
+          +bottom-navbar(title)
+
     block content
   footer
     p Copyright &copy; Joseph Woodside and Corey Sutphin

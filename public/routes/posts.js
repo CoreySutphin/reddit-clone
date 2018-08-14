@@ -9,7 +9,7 @@ var queue = dq ();
 //Models
 let Post = require(path.join(appRoot + '/models/PostSchema'));
 let Subreddit = require(path.join(appRoot + '/models/SubredditSchema'));
-let User = require(path.join(appRoot + '/models/UserSchema'))
+let User = require(path.join(appRoot + '/models/UserSchema'));
 
 router.use(express.static(appRoot + '/public')) // Include static files
 
@@ -105,6 +105,12 @@ function postUpvote(id, user) {
       userData.save(function(err) {
         if (err) throw err;
       });
+      User.findOne({ username: postData.user }, (err, postUser) => {
+        postUser.totalScore++;
+        postUser.save(function(err) {
+          if (err) throw err;
+        });
+      });
     });
   });
 }
@@ -134,6 +140,12 @@ function postDownvote(id, user) {
       });
       userData.save(function(err) {
         if (err) throw err;
+      });
+      User.findOne({ username: postData.user }, (err, postUser) => {
+        postUser.totalScore--;
+        postUser.save(function(err) {
+          if (err) throw err;
+        });
       });
     });
   });

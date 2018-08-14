@@ -95,6 +95,10 @@ app.use('/admin', admin);
 let postRoutes = require(path.join(__dirname + '/public/routes/posts.js'));
 app.use('/post', postRoutes);
 
+//Serve user pages
+let userRoutes = require(path.join(__dirname + '/public/routes/users.js'));
+app.use('/user', userRoutes);
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 module.exports = app;
