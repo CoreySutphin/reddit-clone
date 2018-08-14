@@ -1,11 +1,13 @@
 extends header.pug
 include sidebar-mixin.pug
 include post-expanded-mixin.pug
+include comment-mixin.pug
 
 block css 
   link(href='/css/header-styles.css', rel='stylesheet')
   link(href='/css/subreddit-styles.css', rel='stylesheet')
   link(href='/css/sidebar-styles.css', rel='stylesheet')
+  link(href='/css/comment-styles.css', rel='stylesheet')
 
 block content
   +sidebar(subreddit)
@@ -24,4 +26,16 @@ block content
         a.sortLink(href='/post/' + post._id + '/new') New
         a.sortLink(href='/post/' + post._id + '/best') Best
         a.sortLink(href='/post/' + post._id + '/hot') Hot
-  
+  .submitComment
+    if !user
+      h2 Please login to submit comment
+    else
+      if errors
+        ul
+          li= errors.msg
+      form(method='post', action='/post/' + post._id + '/submitComment')
+        textarea.commentTextArea(name='commentContent', rows='7', cols='75')
+        br
+        input.commentSubmitButton(type='submit', value='save')
+  each comment in postComments
+    +Comment(comment)

@@ -1,0 +1,48 @@
+/* Styles for submitting comments on post page*/
+
+.submitComment {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.commentSubmitButton {
+  padding: 1px 5px 1px 5px;
+  margin-top: 5px;
+}
+
+/* Container for the whole comment in the comment mixin*/
+.commentContainer {
+  display: flex;
+  flex-direction: row;
+  margin: 5px 5px 5px 10px;
+  font-size: 12px;
+}
+
+/* Contains the upvote and downvote arrows*/
+.voteContainer {
+  display: flex;
+  flex-direction: column;
+  margin: 2px;
+}
+
+/* Container for everything but the arrows to get a column display*/
+.commentInfoContainer {
+  display: flex;
+  flex-direction: column;
+  margin-left: 3px;
+}
+
+/* Div container for the topbar info of user, total points, and time since posted*/
+.user_points_timeSince {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Selects all children of the topbar container besides the first */
+.user_points_timeSince > *:not(:first-child) {
+  margin-left: 5px;
+}
+
+.commentInfoContainer > * {
+  margin-bottom: 3px;
+}

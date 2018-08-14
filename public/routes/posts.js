@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const { check, validationResult} = require('express-validator/check');
 
 // Creating a queue for upvote/downvote requests
 const dq = require('deferred-queue');
@@ -10,6 +11,7 @@ var queue = dq ();
 let Post = require(path.join(appRoot + '/models/PostSchema'));
 let Subreddit = require(path.join(appRoot + '/models/SubredditSchema'));
 let User = require(path.join(appRoot + '/models/UserSchema'));
+let Comment = require(path.join(appRoot + '/models/CommentSchema'));
 
 router.use(express.static(appRoot + '/public')) // Include static files
 
@@ -22,6 +24,24 @@ router.get('*', (req,res,next) => {
   res.locals.subreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
 
   next();
+});
+
+router.post('*', (req,res,next) => {
+  res.locals.user = req.user || null;
+  let defaultSubreddits = ['Funny', 'News','Gaming'];
+
+  //Sets a global variable of subreddits to either the users subscribedSubs
+  //or default subs if no user logged in
+  res.locals.subreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
+
+  if (!res.locals.user) {
+    res.render('login', {
+      title: 'Login',
+      errors: [{msg: 'Please sign in'}]
+    });
+  } else {
+    next();
+  }
 });
 
 /*
@@ -40,10 +60,17 @@ router.get('/:id', (req,res) => {
         if(err) {
           console.log(err);
         } else {
-          res.render('text_post', {
-            subreddit: subredditData,
-            post: postData
-          })
+          Comment.find({postId: postID}, (err, allCommentsOnPost) => {
+            if(err) {
+              console.log(err);
+            } else {
+              res.render('text_post', {
+                subreddit: subredditData,
+                post: postData,
+                postComments: allCommentsOnPost
+              });
+            }
+          });
         }
       });
     }
@@ -150,5 +177,41 @@ function postDownvote(id, user) {
     });
   });
 }
+
+/* Routes for comments*/
+
+//Route for top level comment reply
+router.post('/:id/submitComment', (req, res) => {
+  let postID = req.params.id;
+  let commentContent = req.body.commentContent;
+  let user = res.locals.user.username;
+
+  let newComment = new Comment({
+    postId: postID,
+    user: user,
+    content: commentContent
+  });
+
+  newComment.save((err, savedComment) => {
+    if(err) {
+      console.log(err);
+    } else {
+      User.findOne({username: savedComment.user}, (err, userFromDB) => {
+        userFromDB.allCommentIDs.push(savedComment._id);
+        userFromDB.totalScore += (savedComment.upvotes - savedComment.downvotes);
+
+        userFromDB.save((err, savedUser) => {
+          if(err) {
+            console.log(err);
+          } else {
+            console.log(savedUser);
+            res.redirect('/post/' + postID);
+          }
+        });
+      });
+    }
+  });
+
+});
 
 module.exports = router;

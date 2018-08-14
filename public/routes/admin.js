@@ -33,6 +33,45 @@ router.get('*', (req,res,next) => {
   }
 });
 
+router.post('*', (req,res,next) => {
+  res.locals.user = req.user || null;
+  let defaultSubreddits = ['Funny', 'News','Gaming'];
+
+  //Sets a global variable of subreddits to either the users subscribedSubs
+  //or default subs if no user logged in
+  res.locals.subreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
+
+  if (!res.locals.user || !res.locals.user.isAdmin) {
+    res.render('login', {
+      title: 'Login',
+      errors: [{msg: 'Please sign into admin account'}]
+    });
+  } else {
+    next();
+  }
+});
+
+router.post('*', (req, res, next) => {
+  res.locals.user = req.user || null;
+  let defaultSubreddits = ['Funny', 'News','Gaming'];
+
+  //Sets a global variable of subreddits to either the users subscribedSubs
+  //or default subs if no user logged in
+  res.locals.subreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
+
+  //Checks all GET requests to make sure that an admin is signed in
+  //If no admin signed in sends them to login page
+  //Else continues with the routes
+  if (!res.locals.user || !res.locals.user.isAdmin) {
+    res.render('login', {
+      title: 'Login',
+      errors: [{msg: 'Please sign into admin account'}]
+    });
+  } else {
+    next();
+  }
+});
+
 /*
 Dashboard Route
 Has links to /users, /subreddits, /posts
