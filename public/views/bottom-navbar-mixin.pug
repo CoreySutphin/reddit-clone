@@ -9,11 +9,14 @@ mixin bottom-navbar(pageTitle, ...tabs)
       if subreddit
         each tab in tabs
           li: a(href!= '/r/' + subreddit.name + '/' + tab)=tab
+      else if userScore
+        each tab in tabs 
+          li: a(href!= '/user/' + pageTitle + '/' + tab)=tab
         
   .botnav-right
     if user
       span(class='user')
-        a(href='google.com') #{user.username}(
+        a(href!='/user/' + user.username) #{user.username}(
         span(class='user-karma' title='post karma') #{user.totalScore})
         span(class='separator') |
         a(class='logout hover' href='/uauth/logout') Logout
