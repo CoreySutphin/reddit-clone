@@ -1,0 +1,12 @@
+mixin Comment(commentToDisplay)
+  .commentContainer
+    .voteContainer
+      .arrow-up
+      .arrow-down
+    .commentInfoContainer
+      .user_points_timeSince
+        a.commentUsername(href='/user/' + commentToDisplay.user)= commentToDisplay.user
+        p.commentPoints= commentToDisplay.upvotes - commentToDisplay.downvotes + ' points '
+        p.timeSince= timeSince(commentToDisplay.timestamp)
+      p.commentContent= commentToDisplay.content
+      a.commentReply(href='#') reply

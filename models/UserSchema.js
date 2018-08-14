@@ -12,7 +12,8 @@ const UserSchema = new Schema({
   subscribedSubs: [{ type: String, default: [] }],
   totalScore: { type: Number, default: 0 },
   isAdmin: { type: Boolean, default: false},
-  accountCreationTimestamp:{ type: Date, default: Date.now }
+  accountCreationTimestamp:{ type: Date, default: Date.now },
+  allCommentIDs: [{type: String, default: [] }]
 });
 
 // Checks to make sure a user isn't already subscribed to a subreddit
