@@ -60,7 +60,7 @@ router.get('/:id', (req,res) => {
         if(err) {
           console.log(err);
         } else {
-          Comment.find({postId: postID}, (err, allCommentsOnPost) => {
+          Comment.find({ postId: postID }, (err, allCommentsOnPost) => {
             if(err) {
               console.log(err);
             } else {
@@ -108,6 +108,7 @@ router.post('/vote', (req, res) => {
 
 function postUpvote(id, user) {
   User.findOne({ username: user }, (err, userData) => {
+
     if (err) throw err;
     if (userData.upvotedPosts.includes(id)) {
       return null;
@@ -133,6 +134,9 @@ function postUpvote(id, user) {
         if (err) throw err;
       });
       User.findOne({ username: postData.user }, (err, postUser) => {
+        if (postUser.username === user) {
+
+        }
         postUser.totalScore++;
         postUser.save(function(err) {
           if (err) throw err;
