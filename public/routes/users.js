@@ -54,7 +54,7 @@ router.get('/:username/:tab', (req, res) => {
         Comment.find({ user: username }, (err, commentData) => {
           res.render('user_page', { title: userData.username,
             userScore: userData.totalScore,
-            posts: commentData
+            comments: commentData
           });
         });
         break;

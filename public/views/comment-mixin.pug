@@ -1,8 +1,15 @@
 mixin Comment(commentToDisplay)
   .commentContainer
     .voteContainer
-      .arrow-up
-      .arrow-down
+      if (user && user.upvotedComments.indexOf(commentToDisplay._id) > -1)
+        div(class='arrow-up-voted login-required comment', data-action='upvote', data-id=commentToDisplay._id)
+      else
+        div(class='arrow-up login-required comment', data-action='upvote', data-id=commentToDisplay._id)
+      span(class='score')!=(commentToDisplay.upvotes - commentToDisplay.downvotes)
+      if (user && user.downvotedComments.indexOf(commentToDisplay._id) > -1)
+        div(class='arrow-down-voted login-required comment', data-action='downvote', data-id=commentToDisplay._id)
+      else
+        div(class='arrow-down login-required comment', data-action='downvote', data-id=commentToDisplay._id)
     .commentInfoContainer
       .user_points_timeSince
         a.commentUsername(href='/user/' + commentToDisplay.user)= commentToDisplay.user
