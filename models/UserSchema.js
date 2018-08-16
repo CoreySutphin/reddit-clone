@@ -8,6 +8,8 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   upvotedPosts: [{ type: String, default: [] }],
   downvotedPosts: [{ type: String, default: [] }],
+  upvotedComments: [{ type: String, default: [] }],
+  downvotedComments: [{ type: String, default: [] }],
   email: { type: String, required: true, unique: true },
   subscribedSubs: [{ type: String, default: [] }],
   totalScore: { type: Number, default: 0 },

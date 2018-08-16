@@ -12,7 +12,7 @@ function Track(elem) {
     $(target).removeClass('arrow-up');
     $(target).addClass('arrow-up-voted');
 
-    // Sets the corresponding downvote arrow to unclicked
+    // Sets the corresponding downvote arrow to unclicked and increments score
     let downvotes = $('.arrow-down, .arrow-down-voted');
     Array.prototype.forEach.call(downvotes, function(downvote) {
       if (downvote.attributes['data-id'].value === id) {
@@ -26,9 +26,17 @@ function Track(elem) {
       }
     });
 
-    xhttp.open('POST', '/post/vote', true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send('id=' + id + '&direction=' + 1);
+    // Send request to server
+    if ($(target).hasClass('comment')) {
+      xhttp.open('POST', '/post/vote', true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send('id=' + id + '&direction=' + 1 + '&type=' + 'comment');
+    }
+    else {
+      xhttp.open('POST', '/post/vote', true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send('id=' + id + '&direction=' + 1 + '&type=' + 'post');
+    }
   }
 
   this.trackDownvote =  function(target) {
@@ -37,7 +45,7 @@ function Track(elem) {
     $(target).removeClass('arrow-down');
     $(target).addClass('arrow-down-voted');
 
-    // Sets the corresponding upvote arrow to unclicked
+    // Sets the corresponding upvote arrow to unclicked and decrements score
     let upvotes = $('.arrow-up, .arrow-up-voted');
     Array.prototype.forEach.call(upvotes, function(upvote) {
       if (upvote.attributes['data-id'].value === id) {
@@ -51,9 +59,17 @@ function Track(elem) {
       }
     });
 
-    xhttp.open('POST', '/post/vote', true)
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send('id=' + id + '&direction=' + '-1');
+    // Send request to server
+    if ($(target).hasClass('comment')) {
+      xhttp.open('POST', '/post/vote', true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send('id=' + id + '&direction=' + '-1' + '&type=' + 'comment');
+    }
+    else {
+      xhttp.open('POST', '/post/vote', true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send('id=' + id + '&direction=' + '-1' + '&type=' + 'post');
+    }
   }
 
   var self = this;
