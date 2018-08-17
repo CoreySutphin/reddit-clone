@@ -76,3 +76,20 @@
 .replyBox {
   display: none;
 }
+
+/* Div containing the form for a comment edit*/
+.editBox {
+  display: none;
+}
+
+.editButton {
+  color: #888;
+  font-weight: bold;
+  font-size: 11px;
+  margin-left: 4px;
+}
+
+.bottomBarContainer {
+  display: flex;
+  flex-direction: row;
+}

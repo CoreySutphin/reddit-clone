@@ -22,10 +22,8 @@ block content
         b Top
         span.dropdown-arrow
       span.dropdown-content
-        a.sortLink(href='/post/' + post._id + '/top') Top
-        a.sortLink(href='/post/' + post._id + '/new') New
-        a.sortLink(href='/post/' + post._id + '/best') Best
-        a.sortLink(href='/post/' + post._id + '/hot') Hot
+        a.sortLink(href='/post/' + post._id + '/sort/top') Top
+        a.sortLink(href='/post/' + post._id + '/sort/new') New
   .submitComment
     if !user
       h2 Please login to submit a comment
@@ -39,3 +37,6 @@ block content
         input.commentSubmitButton(type='submit', value='save')
   each comment in postComments
     +Comment(comment)
+  footer
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+    script(src='/js/comments.js')

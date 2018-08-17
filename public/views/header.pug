@@ -28,7 +28,8 @@ html(lang="en")
     var user = !{ JSON.stringify(user) }
     if (user)
       window.user = user.username
-  script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
-  script(src='/js/main.js')
-  script(src='/js/event-tracker.js')
+  block script
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+    script(src='/js/main.js')
+    script(src='/js/event-tracker.js')
   
