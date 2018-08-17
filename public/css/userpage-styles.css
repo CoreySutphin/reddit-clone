@@ -2,7 +2,7 @@
 .user-info {
   width: 16vw;
   height: auto;
-  min-height: 15vh;
+  min-height: vh;
   margin-top: 32px;
   float: right;
   border: 1px solid gray;
@@ -17,6 +17,6 @@
   text-align: left;
   text-decoration: none;
   font-size: large;
-  margin-top: 20px;
+  margin-top: 16px;
   margin-bottom: 5px;
 }
