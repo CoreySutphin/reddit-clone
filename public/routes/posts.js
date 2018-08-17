@@ -60,7 +60,7 @@ router.get('/:id', (req,res) => {
         if(err) {
           console.log(err);
         } else {
-          Comment.find({postId: postID}, (err, allCommentsOnPost) => {
+          Comment.find({ postId: postID }, (err, allCommentsOnPost) => {
             if(err) {
               console.log(err);
             } else {
@@ -86,7 +86,12 @@ router.post('/vote', (req, res) => {
     console.log("UPVOTE: " + req.body.id);
     queue.push (function (cb){
       process.nextTick (function (){
-        postUpvote(req.body.id, res.locals.user.username);
+        if (req.body.type === 'post') {
+          postUpvote(req.body.id, res.locals.user.username);
+        }
+        else {
+          commentUpvote(req.body.id, res.locals.user.username);
+        }
         cb ();
       });
     }, function (){
@@ -97,7 +102,12 @@ router.post('/vote', (req, res) => {
     console.log("DOWNVOTE: " + req.body.id);
     queue.push (function (cb){
       process.nextTick (function (){
-        postDownvote(req.body.id, res.locals.user.username);
+        if (req.body.type === 'post') {
+          postDownvote(req.body.id, res.locals.user.username);
+        }
+        else {
+          commentDownvote(req.body.id, res.locals.user.username);
+        }
         cb ();
       });
     }, function (){
@@ -106,36 +116,42 @@ router.post('/vote', (req, res) => {
   }
 });
 
+/*
+  Functions for logging upvotes/downvotes for posts and comments
+*/
 function postUpvote(id, user) {
   User.findOne({ username: user }, (err, userData) => {
     if (err) throw err;
-    if (userData.upvotedPosts.includes(id)) {
-      return null;
-    }
 
-    // Update user with new upvote and removes id from downvotes array if it exists
-    userData.upvotedPosts.push(id);
     Post.findOne({ _id: id }, (err, postData) => {
-      if (userData.downvotedPosts.includes(id)) {
-        // Remove downvote then add upvote
-        postData.downvotes--;
-        postData.upvotes++;
-        userData.downvotedPosts.splice(userData.downvotedPosts.indexOf(id), 1);
-      }
-      else {
-        // Add upvote to post
-        postData.upvotes++;
-      }
-      postData.save(function(err) {
-        if (err) throw err;
-      });
-      userData.save(function(err) {
-        if (err) throw err;
-      });
       User.findOne({ username: postData.user }, (err, postUser) => {
-        postUser.totalScore++;
-        postUser.save(function(err) {
-          if (err) throw err;
+        if (userData.upvotedPosts.includes(id)) {
+          postData.upvotes--;
+          userData.upvotedPosts.splice(userData.upvotedPosts.indexOf(id), 1);
+          postUser.totalScore--;
+        }
+        else if (userData.downvotedPosts.includes(id)) {
+          userData.upvotedPosts.push(id);
+          // Remove downvote then add upvote
+          postData.downvotes--;
+          postData.upvotes++;
+          userData.downvotedPosts.splice(userData.downvotedPosts.indexOf(id), 1);
+          postUser.totalScore += 2;
+        }
+        else {
+          userData.upvotedPosts.push(id);
+          // Add upvote to post
+          postData.upvotes++;
+          postUser.totalScore++;
+        }
+
+        postData.save(function(err) {
+
+        });
+        userData.save(function(err) {
+          postUser.save(function(err) {
+
+          });
         });
       });
     });
@@ -145,40 +161,121 @@ function postUpvote(id, user) {
 function postDownvote(id, user) {
   User.findOne({ username: user }, (err, userData) => {
     if (err) throw err;
-    if (userData.downvotedPosts.includes(id)) {
-      return null;
-    }
 
-    // Update user with new downvote and removes id from upvotes array if it exists
-    userData.downvotedPosts.push(id);
     Post.findOne({ _id: id }, (err, postData) => {
-      if (userData.upvotedPosts.includes(id)) {
-        // Remove upvote then add downvote
-        postData.upvotes--;
-        postData.downvotes++;
-        userData.upvotedPosts.splice(userData.upvotedPosts.indexOf(id), 1);
-      }
-      else {
-        postData.downvotes++;
-      }
-
-      postData.save(function(err) {
-        if (err) throw err;
-      });
-      userData.save(function(err) {
-        if (err) throw err;
-      });
       User.findOne({ username: postData.user }, (err, postUser) => {
-        postUser.totalScore--;
-        postUser.save(function(err) {
-          if (err) throw err;
+        if (userData.downvotedPosts.includes(id)) {
+          postData.downvotes--;
+          userData.downvotedPosts.splice(userData.downvotedPosts.indexOf(id), 1);
+          postUser.totalScore++;
+        }
+        else if (userData.upvotedPosts.includes(id)) {
+          userData.downvotedPosts.push(id);
+          // Remove downvote then add upvote
+          postData.upvotes--;
+          postData.downvotes++;
+          userData.upvotedPosts.splice(userData.upvotedPosts.indexOf(id), 1);
+          postUser.totalScore -= 2;
+        }
+        else {
+          userData.downvotedPosts.push(id);
+          // Add upvote to post
+          postData.downvotes++;
+          postUser.totalScore--;
+        }
+
+        postData.save(function(err) {
+
+        });
+        userData.save(function(err) {
+          postUser.save(function(err) {
+
+          });
         });
       });
     });
   });
 }
 
-/* Routes for comments*/
+function commentUpvote(id, user) {
+  User.findOne({ username: user }, (err, userData) => {
+    if (err) throw err;
+
+    Comment.findOne({ _id: id }, (err, commentData) => {
+      User.findOne({ username: commentData.user }, (err, commentUser) => {
+        if (userData.upvotedComments.includes(id)) {
+          commentData.upvotes--;
+          userData.upvotedComments.splice(userData.upvotedComments.indexOf(id), 1);
+          commentUser.totalScore--;
+        }
+        else if (userData.downvotedComments.includes(id)) {
+          userData.upvotedComments.push(id);
+          // Remove downvote then add upvote
+          commentData.downvotes--;
+          commentData.upvotes++;
+          userData.downvotedComments.splice(userData.downvotedComments.indexOf(id), 1);
+          commentUser.totalScore += 2;
+        }
+        else {
+          userData.upvotedComments.push(id);
+          // Add upvote to post
+          commentData.upvotes++;
+          commentUser.totalScore++;
+        }
+
+        commentData.save(function(err) {
+
+        });
+        userData.save(function(err) {
+          commentUser.save(function(err) {
+
+          });
+        });
+      });
+    });
+  });
+}
+
+function commentDownvote(id, user) {
+  User.findOne({ username: user }, (err, userData) => {
+    if (err) throw err;
+
+    Comment.findOne({ _id: id }, (err, commentData) => {
+      User.findOne({ username: commentData.user }, (err, commentUser) => {
+        if (userData.downvotedComments.includes(id)) {
+          commentData.downvotes--;
+          userData.downvotedComments.splice(userData.downvotedComments.indexOf(id), 1);
+          commentUser.totalScore++;
+        }
+        else if (userData.upvotedComments.includes(id)) {
+          userData.downvotedComments.push(id);
+          // Remove downvote then add upvote
+          commentData.upvotes--;
+          commentData.downvotes++;
+          userData.upvotedComments.splice(userData.upvotedComments.indexOf(id), 1);
+          commentUser.totalScore -= 2;
+        }
+        else {
+          userData.downvotedComments.push(id);
+          // Add upvote to post
+          commentData.downvotes++;
+          commentUser.totalScore--;
+        }
+
+        commentData.save(function(err) {
+
+        });
+        userData.save(function(err) {
+          commentUser.save(function(err) {
+
+          });
+        });
+      });
+    });
+  });
+}
+
+/* Routes for comments */
 
 //Route for top level comment reply
 router.post('/:id/submitComment', (req, res) => {
@@ -196,10 +293,10 @@ router.post('/:id/submitComment', (req, res) => {
     if(err) {
       console.log(err);
     } else {
-      //Adds the comment ID to the user's comments and updates their karma
-      User.findOne({username: savedComment.user}, (err, userFromDB) => {
+      User.findOne({ username: savedComment.user }, (err, userFromDB) => {
         userFromDB.allCommentIDs.push(savedComment._id);
         userFromDB.totalScore += 1;
+        userFromDB.upvotedComments.push(savedComment._id);
 
         userFromDB.save((err, savedUser) => {
           if(err) {

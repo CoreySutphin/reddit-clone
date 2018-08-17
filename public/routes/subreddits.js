@@ -239,12 +239,17 @@ router.post('/:subreddit/submit_text_post',[
       if(err) {
         console.log(err);
       } else {
-        console.log(post);
+        User.findOne({ username: res.locals.user.username }, (err, userData) => {
+          userData.upvotedPosts.push(post._id);
+          userData.totalScore += 1;
+          userData.save((err, user) => {
+            if (err) throw err;
+            // Redirect back to subreddit
+            res.redirect('.');
+          });
+        });
       }
-    })
-
-    // Redirect back to subreddit
-    res.redirect('.');
+    });
   }
 });
 
