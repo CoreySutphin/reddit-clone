@@ -33,16 +33,74 @@ router.get('/:username', (req, res) => {
   });
 });
 
-router.get('/:username/:tab', (req, res) => {
+router.get('/:username/:tab(upvotes|downvotes)/:content(posts|comments)', (req, res) => {
   let username = req.params.username;
   let tab = req.params.tab;
+  let content = req.params.content;
+
+  User.findOne({ username: username }, (err, userData) => {
+    switch(tab) {
+      case 'upvotes':
+        if (content === 'posts') {
+          Post.find({ _id: { $in: userData.upvotedPosts } }, (err, postData) => {
+            res.render('user_page', { title: userData.username,
+              userScore: userData.totalScore,
+              posts: postData,
+              contentType: 'posts',
+              tab: 'upvotes'
+            });
+          });
+        }
+        else if (content === 'comments') {
+          Comment.find({ _id: { $in: userData.upvotedComments } }, (err, commentData) => {
+            res.render('user_page', { title: userData.username,
+              userScore: userData.totalScore,
+              contentType: 'comments',
+              comments: commentData,
+              tab: 'upvotes'
+           });
+          });
+        }
+        break;
+      case 'downvotes':
+        if (content === 'posts') {
+          Post.find({ _id: { $in: userData.downvotedPosts } }, (err, postData) => {
+            res.render('user_page', { title: userData.username,
+              userScore: userData.totalScore,
+              posts: postData,
+              contentType: 'posts',
+              tab: 'downvotes'
+            });
+          });
+        }
+        else if (content === 'comments') {
+          Comment.find({ _id: { $in: userData.downvotedComments } }, (err, commentData) => {
+            res.render('user_page', { title: userData.username,
+              userScore: userData.totalScore,
+              comments: commentData,
+              contentType: 'comments',
+              tab: 'downvotes'
+            });
+          });
+        }
+        break;
+      default:
+        break;
+    }
+  });
+
+});
+
+router.get('/:username/:tab', (req, res) => {
+  let username = req.params.username;
+  let tab = req.params.tab.toLowerCase();
 
   User.findOne({ username: username }, (err, userData) => {
     if (userData === null) {
       res.redirect('/');
     }
     switch(tab) {
-      case 'Posts':
+      case 'posts':
         Post.find({ user: username }, (err, postData) => {
           res.render('user_page', { title: userData.username,
             userScore: userData.totalScore,
@@ -50,7 +108,7 @@ router.get('/:username/:tab', (req, res) => {
           });
         });
         break;
-      case 'Comments':
+      case 'comments':
         Comment.find({ user: username }, (err, commentData) => {
           res.render('user_page', { title: userData.username,
             userScore: userData.totalScore,
@@ -58,21 +116,11 @@ router.get('/:username/:tab', (req, res) => {
           });
         });
         break;
-      case 'Upvotes':
-        Post.find({ _id: { $in: userData.upvotedPosts } }, (err, posts) => {
-          res.render('user_page', { title: userData.username,
-            userScore: userData.totalScore,
-            posts: posts
-          });
-        });
+      case 'upvotes':
+        res.redirect('/user/' + username + '/upvotes/posts');
         break;
-      case 'Downvotes':
-        Post.find({ _id: { $in: userData.downvotedPosts } }, (err, posts) => {
-          res.render('user_page', { title: userData.username,
-            userScore: userData.totalScore,
-            posts: posts
-          });
-        });
+      case 'downvotes':
+        res.redirect('/user/' + username + '/downvotes/posts');
         break;
       default:
         res.redirect('/user/' + username);

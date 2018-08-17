@@ -308,7 +308,7 @@ router.get('/:subreddit', (req, res) => {
 
  // Route for sorting posts on the home page
 router.get('/home/:condition', (req, res) => {
-  let condition = req.params.condition;
+  let condition = req.params.condition.toLowerCase();
 
   Subreddit.findOne({ name: 'home' }, (err, subredditData) => {
     // If user is logged in will display all posts in the users' subscribedSubs
@@ -340,9 +340,9 @@ router.get('/home/:condition', (req, res) => {
 // Route for serving a subreddit with posts sorted by some condition
 router.get('/:subreddit/:condition', (req, res) => {
   let subredditName = req.params.subreddit.toLowerCase();
-  let condition = req.params.condition;
+  let condition = req.params.condition.toLowerCase();
   // Checks if something besides a valid condition was passed in
-  if (['Top', 'New', 'Best', 'Hot'].indexOf(condition) < 0) {
+  if (['top', 'new', 'best', 'hot'].indexOf(condition) < 0) {
     res.redirect('/r/' + subredditName);
     return;
   }
@@ -378,7 +378,7 @@ function shuffle(array) {
 // Sorts posts by a user-supplied condition
 function sortPosts(posts, condition) {
   switch (condition) {
-    case "Top":
+    case "top":
       // sort posts by score descending
       posts.sort(function compare(a, b) {
         a.score = a.upvotes - a.downvotes;
@@ -387,7 +387,7 @@ function sortPosts(posts, condition) {
       });
       break;
 
-    case "New":
+    case "new":
       posts.sort(function(a, b) {
         return b.timestamp.getTime() - a.timestamp.getTime();
       });
