@@ -9,7 +9,7 @@ const CommentSchema = new Schema({
   content: {type: String, default: ''},
   timestamp: {type: Date, default: Date.now},
   upvotes: {type: Number, default: 1},
-  downvotes: {type: Number, default: 0}
+  downvotes: {type: Number, default: 0},
 });
 
 module.exports = mongoose.model("Comment", CommentSchema, "comments");
