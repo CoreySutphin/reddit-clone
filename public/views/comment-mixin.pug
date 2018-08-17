@@ -1,5 +1,5 @@
 mixin Comment(commentToDisplay)
-  .commentContainer
+  .commentContainer(data-depth=commentToDisplay.depth)
     .voteContainer
       if (user && user.upvotedComments.indexOf(commentToDisplay._id) > -1)
         div(class='arrow-up-voted login-required comment', data-action='upvote', data-id=commentToDisplay._id)
@@ -16,4 +16,12 @@ mixin Comment(commentToDisplay)
         p.commentPoints= commentToDisplay.upvotes - commentToDisplay.downvotes + ' points '
         p.timeSince= timeSince(commentToDisplay.timestamp)
       p.commentContent= commentToDisplay.content
-      a.commentReply(href='#') reply
+      if user
+        a.commentReply(href='#', data-id=commentToDisplay._id) reply
+        .replyBox(id=commentToDisplay._id)
+          form(method='post', action='/post/' + post._id + '/submitComment/' + commentToDisplay._id + '/' + commentToDisplay.depth)
+            textarea.commentReplyTextArea(name='commentContent', rows='7', cols='75')
+            br
+            input.commentSubmitButton(type='submit', value='save')
+      else
+        a.commentReply(href='/uauth/login') login to reply

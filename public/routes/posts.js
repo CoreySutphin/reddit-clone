@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const { check, validationResult} = require('express-validator/check');
+const LTT = require('list-to-tree');
 
 // Creating a queue for upvote/downvote requests
 const dq = require('deferred-queue');
@@ -22,7 +23,6 @@ router.get('*', (req,res,next) => {
   //Sets a global variable of subreddits to either the users subscribedSubs
   //or default subs if no user logged in
   res.locals.subreddits = req.user ? req.user.subscribedSubs : defaultSubreddits;
-
   next();
 });
 
@@ -67,7 +67,7 @@ router.get('/:id', (req,res) => {
               res.render('text_post', {
                 subreddit: subredditData,
                 post: postData,
-                postComments: allCommentsOnPost
+                postComments: sortComments(allCommentsOnPost, 4, 'top')
               });
             }
           });
@@ -295,21 +295,150 @@ router.post('/:id/submitComment', (req, res) => {
     } else {
       User.findOne({ username: savedComment.user }, (err, userFromDB) => {
         userFromDB.allCommentIDs.push(savedComment._id);
-        userFromDB.totalScore += (savedComment.upvotes - savedComment.downvotes);
+        userFromDB.totalScore += 1;
         userFromDB.upvotedComments.push(savedComment._id);
 
         userFromDB.save((err, savedUser) => {
           if(err) {
             console.log(err);
           } else {
-            console.log(savedUser);
             res.redirect('/post/' + postID);
           }
         });
       });
     }
   });
-
 });
+
+//Route for replies to comments
+router.post('/:postId/submitComment/:commentId/:depth', (req, res) => {
+  let postID = req.params.postId;
+  let parentCommentID = req.params.commentId;
+  let commentContent = req.body.commentContent;
+  let user = res.locals.user.username;
+  let parentDepth = req.params.depth;
+
+  let newComment = new Comment({
+    postId: postID,
+    parentId: parentCommentID,
+    depth: +parentDepth + 1,
+    user: user,
+    content: commentContent
+  });
+
+  newComment.save((err, savedComment) => {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log(savedComment);
+      //Adds the comment ID to the user's comments and updates their karma
+      User.findOne({username: savedComment.user}, (err, userFromDB) => {
+        userFromDB.allCommentIDs.push(savedComment._id);
+        userFromDB.totalScore += 1;
+
+        userFromDB.save((err, savedUser) => {
+          if(err) {
+            console.log(err);
+          } else {
+            res.redirect('/post/' + postID);
+          }
+        });
+      });
+    }
+  });
+});
+
+
+
+//Given array of comments
+//Returns sorted by score
+function sortComments(comments, maxDepth, condition) {
+  let sortedComments = [];
+  let sortedByDepth = splitByDepthAndSort(comments, maxDepth, condition);
+
+  let topLevelComments = sortedByDepth[0];
+  
+  topLevelComments.forEach(comment => {
+    sortedComments.push(...buildTree(comment, maxDepth, sortedByDepth));
+  });
+
+  return sortedComments;
+}
+
+function getChildrenComments(comment, commentsByDepth) {
+  let currentDepth = comment.depth;
+  let children = commentsByDepth[currentDepth + 1].filter(eachComment => eachComment.parentId == comment._id);
+  if(children.length == 0) {
+    return null;
+  } else {
+    return children;
+  }
+}
+
+function getChildComment(comment, commentsByDepth) {
+  let currentDepth = comment.depth;
+  let children = commentsByDepth[currentDepth + 1].filter(eachComment => eachComment.parentId == comment._id);
+  if(children.length == 0) {
+    return null;
+  } else {
+    return children[0];
+  }
+}
+
+function buildTree(comment, maxDepth, commentsByDepth) {
+  let tree = [comment];
+  let children = getChildrenComments(comment, commentsByDepth);
+  if(!children) {
+    return tree;
+  }
+  children.forEach(eachComment => {
+    tree.push(...commentChain(eachComment, maxDepth, commentsByDepth));
+  });
+
+  return tree;
+}
+
+function commentChain(comment, maxDepth, commentsByDepth) {
+  let chain = [comment];
+  let parent = comment;
+  let depth = 0;
+  while (depth < maxDepth) {
+    let child = getChildComment(parent, commentsByDepth);
+    if (child) {
+      chain.push(child);
+      parent = child;
+      depth++;
+    } else {
+      break;
+    }
+  }
+
+  return chain;
+}
+
+//Sorts the posts by depth and condition passed
+function splitByDepthAndSort(comments, maxDepth, condition) {
+  let commentsSubArrays = [];
+
+  for(let i = 0; i <= maxDepth; i++) {
+    let commentsAtDepth = comments.filter(comment => comment.depth === i);
+    commentsSubArrays.push(sortCommentsByCondition(commentsAtDepth, condition));
+  }
+  return commentsSubArrays;
+}
+
+function sortCommentsByCondition(comments, condition) {
+  switch(condition) {
+    case 'top':
+      comments.sort((a,b) => {
+        aScore = a.upvotes - a.downvotes;
+        bScore = b.upvotes - b.downvotes;
+        return bScore - aScore;
+      });
+    break;
+  }
+
+  return comments;
+}
 
 module.exports = router;

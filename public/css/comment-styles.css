@@ -3,11 +3,13 @@
 .submitComment {
   margin-left: 20px;
   margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .commentSubmitButton {
   padding: 1px 5px 1px 5px;
   margin-top: 5px;
+  margin-right: 5px;
 }
 
 /* Container for the whole comment in the comment mixin*/
@@ -23,6 +25,8 @@
   display: flex;
   flex-direction: column;
   margin: 2px;
+  margin-top: 5px;
+  margin-right: 5px;
 }
 
 /* Container for everything but the arrows to get a column display*/
@@ -30,6 +34,7 @@
   display: flex;
   flex-direction: column;
   margin-left: 3px;
+  max-width: 40vw;
 }
 
 /* Div container for the topbar info of user, total points, and time since posted*/
@@ -41,8 +46,33 @@
 /* Selects all children of the topbar container besides the first */
 .user_points_timeSince > *:not(:first-child) {
   margin-left: 5px;
+  color: #888;
+  font-size: 11px;
 }
 
+/* Gives all elements besides the vote buttons a small margin*/
 .commentInfoContainer > * {
   margin-bottom: 3px;
+}
+
+/* The comment poster username*/
+.commentUsername {
+  color: #369;
+}
+
+/* The reply link on the comment*/
+.commentReply {
+  color: #888;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+/* Styling for the actual comment content*/
+.commentContent {
+  font-size: 14px;
+}
+
+/* Div containing the form for a comment reply*/
+.replyBox {
+  display: none;
 }
