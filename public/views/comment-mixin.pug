@@ -16,12 +16,13 @@ mixin Comment(commentToDisplay)
         p.commentPoints= commentToDisplay.upvotes - commentToDisplay.downvotes + ' points '
         p.timeSince= timeSince(commentToDisplay.timestamp)
       p.commentContent= commentToDisplay.content
-      if user
-        a.commentReply(href='#', data-id=commentToDisplay._id) reply
-        .replyBox(id=commentToDisplay._id)
-          form(method='post', action='/post/' + post._id + '/submitComment/' + commentToDisplay._id + '/' + commentToDisplay.depth)
-            textarea.commentReplyTextArea(name='commentContent', rows='7', cols='75')
-            br
-            input.commentSubmitButton(type='submit', value='save')
-      else
-        a.commentReply(href='/uauth/login') login to reply
+      if post
+        if user
+          a.commentReply(href='#', data-id=commentToDisplay._id) reply
+          .replyBox(id=commentToDisplay._id)
+            form(method='post', action='/post/' + post._id + '/submitComment/' + commentToDisplay._id + '/' + commentToDisplay.depth)
+              textarea.commentReplyTextArea(name='commentContent', rows='7', cols='75')
+              br
+              input.commentSubmitButton(type='submit', value='save')
+        else
+          a.commentReply(href='/uauth/login') login to reply

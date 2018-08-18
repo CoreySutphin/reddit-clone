@@ -22,6 +22,7 @@ a:hover {
 
 .post-table {
   list-style-type: none;
+  margin-top: 10px;
 }
 
 /* CSS for posts on a subreddit */
@@ -184,7 +185,9 @@ a:hover {
 
 /*For the dropdown links */
 .dropdown {
-  max-width: 120px;
+  max-width: 140px;
+  display: inline;
+  margin-right: 5px;
 }
 
 .dropdown-content {
