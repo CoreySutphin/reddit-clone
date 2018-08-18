@@ -335,6 +335,7 @@ router.post('/:postId/submitComment/:commentId/:depth', (req, res) => {
       User.findOne({username: savedComment.user}, (err, userFromDB) => {
         userFromDB.allCommentIDs.push(savedComment._id);
         userFromDB.totalScore += 1;
+        userFromDB.upvotedComments.push(savedComment._id);
 
         userFromDB.save((err, savedUser) => {
           if(err) {
@@ -357,7 +358,7 @@ function sortComments(comments, maxDepth, condition) {
   let sortedByDepth = splitByDepthAndSort(comments, maxDepth, condition);
 
   let topLevelComments = sortedByDepth[0];
-  
+
   topLevelComments.forEach(comment => {
     sortedComments.push(...buildTree(comment, maxDepth, sortedByDepth));
   });

@@ -1,4 +1,4 @@
 mixin user-info(user)
   .user-info 
     a(class='user-name' href!='/user/' + user.username)!='u/' + user.username
-    span #{user.karma} karma
+    span.user-karma #{user.karma} karma

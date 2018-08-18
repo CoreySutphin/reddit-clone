@@ -21,16 +21,10 @@ router.get('*', (req,res,next) => {
   next();
 });
 
-// Renders the overview page for a user
+// Redirects to the posts page for a user
 router.get('/:username', (req, res) => {
   let username = req.params.username;
-
-  User.findOne({ username: username }, (err, userData) => {
-    if (userData === null) {
-      res.redirect('/');
-    }
-    res.render('user_page', { title: userData.username, userScore: userData.totalScore });
-  });
+  res.redirect('/user/' + username + '/posts');
 });
 
 router.get('/:username/:tab(upvotes|downvotes)/:content(posts|comments)', (req, res) => {
@@ -104,7 +98,8 @@ router.get('/:username/:tab', (req, res) => {
         Post.find({ user: username }, (err, postData) => {
           res.render('user_page', { title: userData.username,
             userScore: userData.totalScore,
-            posts: postData
+            posts: postData,
+            contentType: 'posts'
           });
         });
         break;
@@ -112,7 +107,8 @@ router.get('/:username/:tab', (req, res) => {
         Comment.find({ user: username }, (err, commentData) => {
           res.render('user_page', { title: userData.username,
             userScore: userData.totalScore,
-            comments: commentData
+            comments: commentData,
+            contentType: 'comments'
           });
         });
         break;

@@ -3,6 +3,8 @@ mixin bottom-navbar(pageTitle, ...tabs)
     a(href='/' class='reddit-header')
     if subreddit
       a(href='/r/' + subreddit.name  class='page-name')=pageTitle
+    else if userScore
+      a(href='/user/' + pageTitle class='page-name')=pageTitle
     else
       span(class='page-name')=pageTitle
     ul(class='tab-menu')
