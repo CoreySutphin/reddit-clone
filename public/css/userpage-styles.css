@@ -22,7 +22,7 @@
   margin-left: 5px;
 }
 
-.user-karma {
+.userpage-karma {
   font-size: 1.5em;
   color: gray;
   margin-bottom: 5px;
@@ -32,6 +32,18 @@
 .user-filters {
   font-size: 1.5em;
   margin-left: 20px;
+}
+
+/* Used for second dropdown filter on userpage upvotes and downvotes section */
+.second-dropdown {
+  max-width: 140px;
+  display: inline;
+  margin-left: 5px;
+}
+
+.second-dropdown:hover .dropdown-content {
+    display: block;
+    margin-left: 22vh;
 }
 
 .user-content {

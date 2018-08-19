@@ -22,13 +22,23 @@ block content
           a.sortLink(href!='/user/' + title + '/' + tab + '/posts') posts
           a.sortLink(href!='/user/' + title + '/' + tab + '/comments') comments
           
-    .dropdown
-      span='Sort by '
-        b top 
+      .second-dropdown
+        span='Sort by '
+          unless !condition
+            b #{condition} 
           span.dropdown-arrow
-      span.dropdown-content
-        a.sortLink(href!='/user/' + title + '/' + contentType + '/top') top 
-        a.sortLink(href!='/user/' + title + '/' + contentType + '/new') new
+        span.dropdown-content
+          a.sortLink(href!='/user/' + title + '/' + tab + '/' + contentType + '/top') top 
+          a.sortLink(href!='/user/' + title + '/' + tab + '/' + contentType + '/new') new
+    else 
+      .dropdown
+        span='Sort by '
+          unless !condition
+            b #{condition} 
+          span.dropdown-arrow
+        span.dropdown-content
+          a.sortLink(href!='/user/' + title + '/' + contentType + '/top') top 
+          a.sortLink(href!='/user/' + title + '/' + contentType + '/new') new
     hr
         
   .user-content

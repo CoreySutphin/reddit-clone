@@ -18,8 +18,8 @@ mixin bottom-navbar(pageTitle, ...tabs)
   .botnav-right
     if user
       span(class='user')
-        a(href!='/user/' + user.username) #{user.username}(
-        span(class='user-karma' title='post karma') #{user.totalScore})
+        a(href!='/user/' + user.username) #{user.username}
+        span(class='user-karma' title='post karma') (#{user.totalScore})
         span(class='separator') |
         a(class='logout hover' href='/uauth/logout') Logout
         if user.isAdmin
