@@ -28,9 +28,9 @@ mixin Comment(commentToDisplay)
           a.commentReply(href='/uauth/login') login to reply
         if user && user.username == commentToDisplay.user
           a.editButton(href='#', data-id=commentToDisplay._id) edit
-            .editBox
+            .editBox(id='edit' + commentToDisplay._id)
               form(method='post', action='/post/' + post._id + '/editComment/' + commentToDisplay._id)
                 textarea.commentEditTextArea(name='commentContent', rows='7', cols='75')= commentToDisplay.content
                 br
                 input.commentSubmitButton(type='submit', value='save')
-          a(href='/posts/delete')
+          a.deleteComment(href='#', data-id=commentToDisplay._id) delete
