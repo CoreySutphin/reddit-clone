@@ -1,22 +1,55 @@
 extends header.pug 
 include post-mixin.pug
 include comment-mixin.pug
+include user-info-mixin.pug
 
 block css 
   link(href='/css/header-styles.css', rel='stylesheet')
   link(href='/css/subreddit-styles.css', rel='stylesheet')  
   link(href='/css/comment-styles.css', rel='stylesheet')
+  link(href='/css/userpage-styles.css', rel='stylesheet')
 
 block content
-  h2!=userScore
-  if posts
-    div.post-table
+  +user-info({ username: title, karma: userScore })
+  
+  span.user-filters
+    if tab
+      .dropdown
+        span='Show ' 
+          b!=contentType
+            span.dropdown-arrow
+        span.dropdown-content
+          a.sortLink(href!='/user/' + title + '/' + tab + '/posts') posts
+          a.sortLink(href!='/user/' + title + '/' + tab + '/comments') comments
+          
+      .second-dropdown
+        span='Sort by '
+          unless !condition
+            b #{condition} 
+          span.dropdown-arrow
+        span.dropdown-content
+          a.sortLink(href!='/user/' + title + '/' + tab + '/' + contentType + '/top') top 
+          a.sortLink(href!='/user/' + title + '/' + tab + '/' + contentType + '/new') new
+    else 
+      .dropdown
+        span='Sort by '
+          unless !condition
+            b #{condition} 
+          span.dropdown-arrow
+        span.dropdown-content
+          a.sortLink(href!='/user/' + title + '/' + contentType + '/top') top 
+          a.sortLink(href!='/user/' + title + '/' + contentType + '/new') new
+    hr
+        
+  .user-content
+    if posts  
       each post, index in posts
         +post({"upvotes": post.upvotes, "downvotes": post.downvotes,"_id": post._id, 
           "title": post.title, "timestamp": post.timestamp, "user": post.user, 
           "subreddit": post.subreddit}, (index + 1))
-  else if comments
-    each comment in comments
-      +Comment(comment)
+        
+    else if comments
+      each comment in comments
+        +Comment(comment)
     
     

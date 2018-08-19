@@ -345,6 +345,7 @@ router.post('/:postId/submitComment/:commentId/:depth', (req, res) => {
       User.findOne({username: savedComment.user}, (err, userFromDB) => {
         userFromDB.allCommentIDs.push(savedComment._id);
         userFromDB.totalScore += 1;
+        userFromDB.upvotedComments.push(savedComment._id);
 
         userFromDB.save((err, savedUser) => {
           if(err) {

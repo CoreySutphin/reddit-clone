@@ -14,9 +14,9 @@ html(lang="en")
       div.header
         +top-navbar(topBarSubreddits)
         if subreddit
-          +bottom-navbar(title || subreddit.title, "Best", "Hot", "New", "Rising", "Top")
+          +bottom-navbar(title || subreddit.title, "best", "hot", "new", "rising", "top")
         else if userScore
-          +bottom-navbar(title, "Posts", "Comments", "Upvotes", "Downvotes")
+          +bottom-navbar(title, "posts", "comments", "upvotes", "downvotes")
         else 
           +bottom-navbar(title)
 
