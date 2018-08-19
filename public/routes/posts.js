@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const { check, validationResult} = require('express-validator/check');
-const LTT = require('list-to-tree');
 
 // Creating a queue for upvote/downvote requests
 const dq = require('deferred-queue');
@@ -47,8 +46,9 @@ router.post('*', (req,res,next) => {
 /*
   Route for individual post
 */
-router.get('/:id', (req,res) => {
+router.get('/:id/sort/:condition', (req,res) => {
   let postID = req.params.id;
+  let condition = req.params.condition;
 
   Post.findOne({_id: postID}, (err, postData) => {
     if(err) {
@@ -67,7 +67,7 @@ router.get('/:id', (req,res) => {
               res.render('text_post', {
                 subreddit: subredditData,
                 post: postData,
-                postComments: sortComments(allCommentsOnPost, 4, 'top')
+                postComments: sortComments(allCommentsOnPost, 4, condition)
               });
             }
           });
@@ -75,6 +75,10 @@ router.get('/:id', (req,res) => {
       });
     }
   });
+});
+
+router.get('/:id', (req, res) => {
+  res.redirect('/post/' + req.params.id + '/sort/top');
 });
 
 router.post('/vote', (req, res) => {
@@ -202,6 +206,9 @@ function commentUpvote(id, user) {
     if (err) throw err;
 
     Comment.findOne({ _id: id }, (err, commentData) => {
+      if(commentData.user === '[deleted]') {
+        return;
+      }
       User.findOne({ username: commentData.user }, (err, commentUser) => {
         if (userData.upvotedComments.includes(id)) {
           commentData.upvotes--;
@@ -241,6 +248,9 @@ function commentDownvote(id, user) {
     if (err) throw err;
 
     Comment.findOne({ _id: id }, (err, commentData) => {
+      if(commentData.user === '[deleted]') {
+        return;
+      }
       User.findOne({ username: commentData.user }, (err, commentUser) => {
         if (userData.downvotedComments.includes(id)) {
           commentData.downvotes--;
@@ -349,7 +359,38 @@ router.post('/:postId/submitComment/:commentId/:depth', (req, res) => {
   });
 });
 
+//Route for editing comments
+router.post('/:postID/editComment/:commentID', (req, res) => {
+  let commentID = req.params.commentID;
+  let postId = req.params.postID;
 
+  let update = {content: req.body.commentContent}
+
+  Comment.findByIdAndUpdate({_id: commentID}, update, (err, updatedComment) => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.redirect('/post/' + postId);
+    }
+  });
+});
+
+//Route for deleting comment
+router.post('/deleteComment/:id', (req, res) => {
+  let commentID = req.params.id;
+  let update = {
+    user: '[deleted]',
+    content: '[deleted]'
+  }
+
+  Comment.findByIdAndUpdate({_id: commentID}, update, (err, updatedComment) => {
+    if(err) {
+      res.send(err);
+    } else {
+      res.send('Success');
+    }
+  });
+});
 
 //Given array of comments
 //Returns sorted by score
@@ -366,6 +407,7 @@ function sortComments(comments, maxDepth, condition) {
   return sortedComments;
 }
 
+//Returns all children comments of the given comment
 function getChildrenComments(comment, commentsByDepth) {
   let currentDepth = comment.depth;
   let children = commentsByDepth[currentDepth + 1].filter(eachComment => eachComment.parentId == comment._id);
@@ -376,45 +418,20 @@ function getChildrenComments(comment, commentsByDepth) {
   }
 }
 
-function getChildComment(comment, commentsByDepth) {
-  let currentDepth = comment.depth;
-  let children = commentsByDepth[currentDepth + 1].filter(eachComment => eachComment.parentId == comment._id);
-  if(children.length == 0) {
-    return null;
-  } else {
-    return children[0];
-  }
-}
-
+//Given a comment builds a hierarchial tree with all children and subsequent nodes
 function buildTree(comment, maxDepth, commentsByDepth) {
   let tree = [comment];
+  let currentDepth = comment.depth;
   let children = getChildrenComments(comment, commentsByDepth);
-  if(!children) {
+  if(!children || currentDepth === maxDepth) {
     return tree;
   }
   children.forEach(eachComment => {
-    tree.push(...commentChain(eachComment, maxDepth, commentsByDepth));
+    tree.push(...buildTree(eachComment, maxDepth, commentsByDepth));
   });
 
+
   return tree;
-}
-
-function commentChain(comment, maxDepth, commentsByDepth) {
-  let chain = [comment];
-  let parent = comment;
-  let depth = 0;
-  while (depth < maxDepth) {
-    let child = getChildComment(parent, commentsByDepth);
-    if (child) {
-      chain.push(child);
-      parent = child;
-      depth++;
-    } else {
-      break;
-    }
-  }
-
-  return chain;
 }
 
 //Sorts the posts by depth and condition passed
@@ -431,6 +448,21 @@ function splitByDepthAndSort(comments, maxDepth, condition) {
 function sortCommentsByCondition(comments, condition) {
   switch(condition) {
     case 'top':
+      comments.sort((a,b) => {
+        aScore = a.upvotes - a.downvotes;
+        bScore = b.upvotes - b.downvotes;
+        return bScore - aScore;
+      });
+    break;
+
+    case 'new':
+      comments.sort((a,b) => {
+        return b.timestamp.getTime() - a.timestamp.getTime();
+      });
+    break;
+
+    //Default sort will be top
+    default:
       comments.sort((a,b) => {
         aScore = a.upvotes - a.downvotes;
         bScore = b.upvotes - b.downvotes;

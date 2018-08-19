@@ -16,7 +16,7 @@ mixin Comment(commentToDisplay)
         p.commentPoints= commentToDisplay.upvotes - commentToDisplay.downvotes + ' points '
         p.timeSince= timeSince(commentToDisplay.timestamp)
       p.commentContent= commentToDisplay.content
-      if post
+      .bottomBarContainer
         if user
           a.commentReply(href='#', data-id=commentToDisplay._id) reply
           .replyBox(id=commentToDisplay._id)
@@ -26,3 +26,12 @@ mixin Comment(commentToDisplay)
               input.commentSubmitButton(type='submit', value='save')
         else
           a.commentReply(href='/uauth/login') login to reply
+        if user && user.username == commentToDisplay.user
+          a.editButton(href='#', data-id=commentToDisplay._id) edit
+            .editBox(id='edit' + commentToDisplay._id)
+              form(method='post', action='/post/' + post._id + '/editComment/' + commentToDisplay._id)
+                textarea.commentEditTextArea(name='commentContent', rows='7', cols='75')= commentToDisplay.content
+                br
+                input.commentSubmitButton(type='submit', value='save')
+          a.deleteComment(href='#', data-id=commentToDisplay._id) delete
+
