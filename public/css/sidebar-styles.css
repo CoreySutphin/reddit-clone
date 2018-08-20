@@ -24,7 +24,7 @@ a {
 
 /*The div that contains the login form to be shown in the sidebar if a user is not logged in */
 .loginDiv {
-  height: 6vh;
+  height: 8vh;
   width: 90%;
   min-height: 50px;
   margin-top: 10px;
