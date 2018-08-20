@@ -32,7 +32,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Replace with your db username and password
-mongoose.connect('mongodb://joseph:Woodside1@ds129831.mlab.com:29831/reddit-clone-cs', { useNewUrlParser: true },
+mongoose.connect(process.env.MONGO, { useNewUrlParser: true },
  function(err) {
   if (err) throw err;
 });
